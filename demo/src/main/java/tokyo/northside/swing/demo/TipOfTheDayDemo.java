@@ -42,17 +42,21 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
 @SuppressWarnings("serial")
 public class TipOfTheDayDemo extends JPanel {
     private TipOfTheDayModel model;
+    private static final JFrame frame = new JFrame();
 
     /**
      * main method allows us to run as a standalone demo.
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame();
-
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new TipOfTheDayDemo());
-            frame.setPreferredSize(new Dimension(800, 600));
+            frame.setTitle("\"Tip of the Day\" Demo Application");
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+            panel.add(new JLabel("Following is embed version of Tip of the Day."));
+            panel.add(new TipOfTheDayDemo());
+            frame.getContentPane().add(panel);
+            frame.setPreferredSize(new Dimension(800, 400));
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
@@ -68,21 +72,31 @@ public class TipOfTheDayDemo extends JPanel {
         model = createTipOfTheDayModel();
         JPanel panel = new JPanel();
         JXTipOfTheDay totd1 = new JXTipOfTheDay(model);
+        totd1.setPreferredSize(new Dimension(400, 250));
         totd1.setName("totd");
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(totd1);
         add(panel);
 
         JPanel buttonPanel = new JPanel();
+        JButton previousTipButton = new JButton();
+        previousTipButton.setText("Previous tip<<");
+        buttonPanel.add(previousTipButton);
         JButton nextTipButton = new JButton();
-        nextTipButton.setText("Next tip");
+        nextTipButton.setText(">>Next tip");
         buttonPanel.add(nextTipButton);
 
         JButton dialogButton = new JButton();
         dialogButton.setText("show tip of the day as dialog");
         buttonPanel.add(dialogButton);
+        JButton closeButton = new JButton();
+        closeButton.setText("Close");
+        buttonPanel.add(closeButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
+        previousTipButton.addActionListener(actionEvent -> {
+            totd1.previousTip();
+        });
         nextTipButton.addActionListener(actionEvent -> {
             totd1.nextTip();
         });
@@ -91,6 +105,12 @@ public class TipOfTheDayDemo extends JPanel {
             JXTipOfTheDay totd = new JXTipOfTheDay(model);
             totd.setCurrentTip(0);
             totd.showDialog(TipOfTheDayDemo.this);
+        });
+
+        closeButton.addActionListener(actionEvent -> {
+            if (frame.isDisplayable()) {
+                frame.dispose();
+            }
         });
     }
 
