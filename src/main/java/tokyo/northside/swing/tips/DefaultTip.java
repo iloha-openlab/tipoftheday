@@ -20,7 +20,7 @@
 package tokyo.northside.swing.tips;
 
 /**
- * Default {@link Tip} implementation.<br>
+ * Default {@link Tip} implementation.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura

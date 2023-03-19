@@ -22,8 +22,9 @@ package tokyo.northside.swing;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.util.prefs.Preferences;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
+
+import tokyo.northside.swing.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.swing.plaf.TipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
@@ -32,7 +33,7 @@ import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
 /**
- * Provides the "Tip of The Day" pane and dialog.<br>
+ * Provides the "Tip of The Day" pane and dialog.
  *
  * <p>
  * Tips are retrieved from the {@link TipOfTheDayModel}.
@@ -160,8 +161,11 @@ public class JXTipOfTheDay extends JPanel {
      */
     @Override
     public void updateUI() {
-        // FIXME.
-        setUI(getUI());
+        if (UIManager.get(getUIClassID()) != null) {
+            setUI((TipOfTheDayUI) UIManager.getUI(this));
+        } else {
+            setUI(new DefaultTipOfTheDayUI(this));
+        }
     }
 
     /**
