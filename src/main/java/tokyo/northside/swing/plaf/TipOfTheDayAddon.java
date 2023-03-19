@@ -8,62 +8,61 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package tokyo.northside.swing.plaf;
 
-
-import tokyo.northside.swing.JXTipOfTheDay;
-
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
-import java.awt.*;
+import tokyo.northside.swing.JXTipOfTheDay;
 
 /**
  * Addon for <code>JXTipOfTheDay</code>.<br>
- * 
+ *
  * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
  */
 public class TipOfTheDayAddon extends AbstractComponentAddon {
 
-  public TipOfTheDayAddon() {
-    super("JXTipOfTheDay");
-  }
+    public TipOfTheDayAddon() {
+        super("JXTipOfTheDay");
+    }
 
-  @Override
-  protected void addBasicDefaults(LookAndFeelAddons addon, DefaultsList defaults) {
-      super.addBasicDefaults(addon, defaults);
-      
-      Font font = UIManager.getFont("Label.font");
-      if (font == null) {
-          font = new Font("Dialog", Font.PLAIN, 12);
-      }
-      font = font.deriveFont(Font.BOLD, 13f);
-      
-      defaults.add(JXTipOfTheDay.uiClassID, BasicTipOfTheDayUI.class.getName());
-      Font tipOfTheDayFont = UIManager.getFont("TextPane.font");
-      if (tipOfTheDayFont == null) {
-          tipOfTheDayFont = new Font("Serif", Font.PLAIN, 12);
-      }
-      defaults.add("TipOfTheDay.font", tipOfTheDayFont);
-      defaults.add("TipOfTheDay.tipFont", new FontUIResource(font));
-      defaults.add("TipOfTheDay.background", new ColorUIResource(Color.WHITE));
-      defaults.add("TipOfTheDay.icon",
-              LookAndFeel.makeIcon(BasicTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
-      defaults.add("TipOfTheDay.border", new BorderUIResource(
-              BorderFactory.createLineBorder(new Color(117, 117, 117))));
+    @Override
+    protected void addBasicDefaults(LookAndFeelAddons addon, DefaultsList defaults) {
+        super.addBasicDefaults(addon, defaults);
 
-     // XXX: UIManagerExt.addResourceBundle("org.jdesktop.swingx.plaf.basic.resources.TipOfTheDay");
-  }
+        Font font = UIManager.getFont("Label.font");
+        if (font == null) {
+            font = new Font("Dialog", Font.PLAIN, 12);
+        }
+        font = font.deriveFont(Font.BOLD, 13f);
 
+        defaults.add(JXTipOfTheDay.uiClassID, BasicTipOfTheDayUI.class.getName());
+        Font tipOfTheDayFont = UIManager.getFont("TextPane.font");
+        if (tipOfTheDayFont == null) {
+            tipOfTheDayFont = new Font("Serif", Font.PLAIN, 12);
+        }
+        defaults.add("TipOfTheDay.font", tipOfTheDayFont);
+        defaults.add("TipOfTheDay.tipFont", new FontUIResource(font));
+        defaults.add("TipOfTheDay.background", new ColorUIResource(Color.WHITE));
+        defaults.add("TipOfTheDay.icon", LookAndFeel.makeIcon(BasicTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
+        defaults.add(
+                "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
+
+        // XXX: UIManagerExt.addResourceBundle("org.jdesktop.swingx.plaf.basic.resources.TipOfTheDay");
+    }
 }

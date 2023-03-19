@@ -20,10 +20,6 @@
  */
 package tokyo.northside.swing.plaf;
 
-
-import javax.swing.*;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +32,13 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
+import javax.swing.Painter;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 
 /**
  * Provides additional pluggable UI for new components added by the library. By default, the library
@@ -61,16 +64,15 @@ import java.util.logging.Logger;
  * The addon can also be installed directly by calling the {@link #setAddon(String)}method. For
  * example, to install the Windows addons, add the following statement
  * <code>LookAndFeelAddons.setAddon("org.jdesktop.swingx.plaf.windows.WindowsLookAndFeelAddons");</code>.
- * 
+ *
  * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
  * @author Karl Schaefer
  */
 @SuppressWarnings("nls")
 public abstract class LookAndFeelAddons {
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(LookAndFeelAddons.class
-            .getName());
-    
+    private static final Logger LOG = Logger.getLogger(LookAndFeelAddons.class.getName());
+
     private static List<ComponentAddon> contributedComponents = new ArrayList<ComponentAddon>();
 
     /**
@@ -89,7 +91,7 @@ public abstract class LookAndFeelAddons {
             addonClassname = System.getProperty("swing.addon", addonClassname);
         } catch (SecurityException ignore) {
             // security exception may arise in Java Web Start
-          LOG.log(Level.FINE, "not allowed to access property swing.addon", ignore);
+            LOG.log(Level.FINE, "not allowed to access property swing.addon", ignore);
         }
 
         try {
@@ -108,7 +110,7 @@ public abstract class LookAndFeelAddons {
     /**
      * Determines if the addon is a match for the {@link UIManager#getLookAndFeel() current Look and
      * Feel}.
-     * 
+     *
      * @return {@code true} if this addon matches (is compatible); {@code false} otherwise
      */
     protected boolean matches() {
@@ -117,7 +119,7 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Determines if the addon is a match for the system Look and Feel.
-     * 
+     *
      * @return {@code true} if this addon matches (is compatible with) the system Look and Feel;
      *         {@code false} otherwise
      */
@@ -127,19 +129,19 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Initializes the look and feel addon. This method is
-     * 
+     *
      * @see #uninitialize
      * @see UIManager#setLookAndFeel
      */
     public void initialize() {
-        for (Iterator<ComponentAddon> iter = contributedComponents.iterator(); iter.hasNext();) {
+        for (Iterator<ComponentAddon> iter = contributedComponents.iterator(); iter.hasNext(); ) {
             ComponentAddon addon = iter.next();
             addon.initialize(this);
         }
     }
 
     public void uninitialize() {
-        for (Iterator<ComponentAddon> iter = contributedComponents.iterator(); iter.hasNext();) {
+        for (Iterator<ComponentAddon> iter = contributedComponents.iterator(); iter.hasNext(); ) {
             ComponentAddon addon = iter.next();
             addon.uninitialize(this);
         }
@@ -147,14 +149,14 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Adds the given defaults in UIManager.
-     * 
+     *
      * Note: the values are added only if they do not exist in the existing look and feel defaults.
      * This makes it possible for look and feel implementors to override SwingX defaults.
-     * 
+     *
      * Note: the array is traversed in reverse order. If a key is found twice in the array, the
      * key/value with the highest position in the array gets precedence over the other key in the
      * array
-     * 
+     *
      * @param keysAndValues
      */
     public void loadDefaults(Object[] keysAndValues) {
@@ -174,14 +176,16 @@ public abstract class LookAndFeelAddons {
          */
     }
 
-    public static void setAddon(String addonClassName) throws InstantiationException,
-            IllegalAccessException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
+    public static void setAddon(String addonClassName)
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException, InvocationTargetException,
+                    NoSuchMethodException {
         setAddon(Class.forName(addonClassName, true, getClassLoader()));
     }
 
-    public static void setAddon(Class<?> addonClass) throws InstantiationException,
-            IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        LookAndFeelAddons addon = (LookAndFeelAddons) addonClass.getDeclaredConstructor().newInstance();
+    public static void setAddon(Class<?> addonClass)
+            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        LookAndFeelAddons addon =
+                (LookAndFeelAddons) addonClass.getDeclaredConstructor().newInstance();
         setAddon(addon);
     }
 
@@ -209,7 +213,7 @@ public abstract class LookAndFeelAddons {
 
     private static ClassLoader getClassLoader() {
         ClassLoader cl = null;
-        
+
         try {
             cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
                 @Override
@@ -217,11 +221,12 @@ public abstract class LookAndFeelAddons {
                     return LookAndFeelAddons.class.getClassLoader();
                 }
             });
-        } catch (SecurityException ignore) { }
-        
+        } catch (SecurityException ignore) {
+        }
+
         if (cl == null) {
             final Thread t = Thread.currentThread();
-            
+
             try {
                 cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
                     @Override
@@ -229,9 +234,10 @@ public abstract class LookAndFeelAddons {
                         return t.getContextClassLoader();
                     }
                 });
-            } catch (SecurityException ignore) { }
+            } catch (SecurityException ignore) {
+            }
         }
-        
+
         if (cl == null) {
             try {
                 cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
@@ -240,12 +246,13 @@ public abstract class LookAndFeelAddons {
                         return ClassLoader.getSystemClassLoader();
                     }
                 });
-            } catch (SecurityException ignore) { }
+            } catch (SecurityException ignore) {
+            }
         }
-        
+
         return cl;
     }
-    
+
     /**
      * Based on the current look and feel (as returned by <code>UIManager.getLookAndFeel()</code>),
      * this method returns the name of the closest <code>LookAndFeelAddons</code> to use.
@@ -257,9 +264,9 @@ public abstract class LookAndFeelAddons {
      * <li> loop through the addons provided by services and return the first that matches
      * <li> return the cross-platform addons
      * </ol>
-     * 
+     *
      * @return the addon matching the currently installed look and feel
-     * 
+     *
      * @see #getCrossPlatformAddonClassName()
      * @see #getSystemAddonClassName()
      * @see #getProvidedLookAndFeelAddons()
@@ -268,9 +275,11 @@ public abstract class LookAndFeelAddons {
         LookAndFeel laf = UIManager.getLookAndFeel();
         String className = null;
 
-        if (UIManager.getCrossPlatformLookAndFeelClassName().equals(laf.getClass().getName())) {
+        if (UIManager.getCrossPlatformLookAndFeelClassName()
+                .equals(laf.getClass().getName())) {
             className = getCrossPlatformAddonClassName();
-        } else if (UIManager.getSystemLookAndFeelClassName().equals(laf.getClass().getName())) {
+        } else if (UIManager.getSystemLookAndFeelClassName()
+                .equals(laf.getClass().getName())) {
             className = getSystemAddonClassName();
         } else {
             Iterable<LookAndFeelAddons> loadedAddons = getProvidedLookAndFeelAddons();
@@ -292,13 +301,13 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Returns the addon class name best suited for cross-platform laf.
-     * The lookup sequence is implemented to 
+     * The lookup sequence is implemented to
      * <ol>
-     * <li> get and return the system property 
+     * <li> get and return the system property
      *   <code>swing.crossplatformlafaddon</code> if available
-     * <li> return the addon (hard-coded!) for Metal   
+     * <li> return the addon (hard-coded!) for Metal
      * </ol>
-     * 
+     *
      * @return the class name of the cross-platform addon
      */
     public static String getCrossPlatformAddonClassName() {
@@ -306,8 +315,8 @@ public abstract class LookAndFeelAddons {
             return AccessController.doPrivileged(new PrivilegedAction<String>() {
                 @Override
                 public String run() {
-                    return System.getProperty("swing.crossplatformlafaddon",
-                            "org.jdesktop.swingx.plaf.metal.MetalLookAndFeelAddons");
+                    return System.getProperty(
+                            "swing.crossplatformlafaddon", "org.jdesktop.swingx.plaf.metal.MetalLookAndFeelAddons");
                 }
             });
         } catch (SecurityException ignore) {
@@ -318,16 +327,16 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Gets the addon best suited for the operating system where the virtual machine is running.
-     * 
+     *
      * The lookup is implemented like
      * <ol>
      * <li> loop through the addons provided by services and return the first
      * that isSystemAddon
      * <li> return the cross-platform addons
      * </ol>
-     * 
+     *
      * @return the addon matching the native operating system platform.
-     * 
+     *
      * @see #getProvidedLookAndFeelAddons()
      * @see #getCrossPlatformAddonClassName()
      */
@@ -351,27 +360,25 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Returns the LookAndFeelAddons from the ServiceLoader.
-     * 
-     * The actual lookup of the provider must 
+     *
+     * The actual lookup of the provider must
      * be triggered in a privileged action to force
-     * loading the classes. Without, it might not have access to the 
+     * loading the classes. Without, it might not have access to the
      * provider configuration file in security restricted contexts.
-     * 
+     *
      * @return the LookAndFeelAddons from the ServiceLoader
      */
     protected static Iterable<LookAndFeelAddons> getProvidedLookAndFeelAddons() {
-        final ServiceLoader<LookAndFeelAddons> loader = ServiceLoader.load(LookAndFeelAddons.class,
-                getClassLoader());
+        final ServiceLoader<LookAndFeelAddons> loader = ServiceLoader.load(LookAndFeelAddons.class, getClassLoader());
         // need to access the iterator inside a privileged action
         // probably because it's lazily loaded
-        AccessController
-                .doPrivileged(new PrivilegedAction<Iterable<LookAndFeelAddons>>() {
-                    @Override
-                    public Iterable<LookAndFeelAddons> run() {
-                        loader.iterator().hasNext();
-                        return loader;
-                    }
-                });
+        AccessController.doPrivileged(new PrivilegedAction<Iterable<LookAndFeelAddons>>() {
+            @Override
+            public Iterable<LookAndFeelAddons> run() {
+                loader.iterator().hasNext();
+                return loader;
+            }
+        });
 
         return loader;
     }
@@ -379,7 +386,7 @@ public abstract class LookAndFeelAddons {
     /**
      * Each new component added by the library will contribute its default UI classes, colors and
      * fonts to the LookAndFeelAddons. See {@link ComponentAddon}.
-     * 
+     *
      * @param component
      */
     public static void contribute(ComponentAddon component) {
@@ -394,7 +401,7 @@ public abstract class LookAndFeelAddons {
 
     /**
      * Removes the contribution of the given addon
-     * 
+     *
      * @param component
      */
     public static void uncontribute(ComponentAddon component) {
@@ -408,7 +415,7 @@ public abstract class LookAndFeelAddons {
     /**
      * Workaround for IDE mixing up with classloaders and Applets environments. Consider this method
      * as API private. It must not be called directly.
-     * 
+     *
      * @param component
      * @param expectedUIClass
      * @return an instance of expectedUIClass
@@ -421,8 +428,8 @@ public abstract class LookAndFeelAddons {
         // possible workaround and more debug info on #784
         if (uiClassname == null) {
             Logger logger = Logger.getLogger("LookAndFeelAddons");
-            logger.warning("Failed to retrieve UI for " + component.getClass().getName()
-                    + " with UIClassID " + component.getUIClassID());
+            logger.warning("Failed to retrieve UI for " + component.getClass().getName() + " with UIClassID "
+                    + component.getUIClassID());
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Existing UI defaults keys: "
                         + new ArrayList<Object>(UIManager.getDefaults().keySet()));
@@ -456,10 +463,9 @@ public abstract class LookAndFeelAddons {
 
             if (realUIClass != null) {
                 try {
-                    Method createUIMethod = realUIClass.getMethod("createUI",
-                            new Class[] { JComponent.class });
+                    Method createUIMethod = realUIClass.getMethod("createUI", new Class[] {JComponent.class});
 
-                    return (ComponentUI) createUIMethod.invoke(null, new Object[] { component });
+                    return (ComponentUI) createUIMethod.invoke(null, new Object[] {component});
                 } catch (NoSuchMethodException e) {
                     barkOnUIError("static createUI() method not found in " + realUIClass);
                 } catch (Exception e) {
@@ -482,7 +488,7 @@ public abstract class LookAndFeelAddons {
      * previously added by LookAndFeelAddons will be removed) but the addon will not reinitialize
      * because addon initialize itself through the static block in components and the classes do not
      * get reloaded. This means component.updateUI will fail because it will not find its UI.
-     * 
+     *
      * This method ensures LookAndFeelAddons get re-initialized if needed. It must be called in
      * every component updateUI methods.
      */
@@ -518,7 +524,7 @@ public abstract class LookAndFeelAddons {
     /**
      * If true, everytime the Swing look and feel is changed, the addon which best matches the
      * current look and feel will be automatically selected.
-     * 
+     *
      * @param tracking
      *            true to automatically update the addon, false to not automatically track the
      *            addon. Defaults to false.
@@ -552,7 +558,7 @@ public abstract class LookAndFeelAddons {
     /**
      * Convenience method for uninstalling a background painter. If the painter of the component is
      * a {@code UIResource}, it is set to {@code null}.
-     * 
+     *
      * @param c
      *            component to uninstall the painter on
      * @throws NullPointerException
