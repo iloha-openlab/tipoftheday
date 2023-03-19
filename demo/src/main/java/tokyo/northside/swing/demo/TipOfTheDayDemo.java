@@ -21,13 +21,22 @@ package tokyo.northside.swing.demo;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 
 import tokyo.northside.swing.JXTipOfTheDay;
-import tokyo.northside.swing.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
@@ -133,8 +142,15 @@ public class TipOfTheDayDemo extends JPanel {
         tips.add(new DefaultTip("Component Tip", new JTree()));
 
         // an Icon
-        tips.add(new DefaultTip("Icon Tip", new ImageIcon(TipOfTheDayDemo.class.getResource("TipOfTheDayDemo.png"))));
+        tips.add(new DefaultTip("Icon Tip", new ImageIcon(
+                Objects.requireNonNull(TipOfTheDayDemo.class.getResource("TipOfTheDayDemo.png")))));
 
+        try (InputStream is = getClass().getResourceAsStream("TipOfTheDayDemo.html")) {
+            if (is != null) {
+                tips.add(new DefaultTip("HTML file", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
+            }
+        } catch (IOException ignored) {
+        }
         return tips;
     }
 }
