@@ -102,6 +102,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
                 "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
         defaults.put(
                 "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
-        defaults.addResourceBundle("TipOfTheDay");
+        defaults.addResourceBundle("tokyo.northside.swing.TipOfTheDay");
     }
 }
