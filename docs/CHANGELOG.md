@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [v0.2.1]
+## [v0.2.2]
 
-- First publish version.
+- Add contribution guide.
 
 ## [v0.2.0]
 
@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.1...HEAD
-[v0.2.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.0...v0.2.1
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...HEAD
+[v0.2.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.0...v0.2.2
 [v0.2.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.1.0...v0.1.1
