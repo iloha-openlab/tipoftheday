@@ -3,6 +3,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
+    application
     `java-library`
     `maven-publish`
     checkstyle
@@ -10,6 +11,7 @@ plugins {
     signing
     id("com.github.spotbugs") version "5.0.9"
     id("com.diffplug.spotless") version "6.15.0"
+    id("tokyo.northside.sphinx") version "1.0.4"
     id("com.palantir.git-version") version "0.13.0" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
@@ -200,3 +202,15 @@ spotless {
     }
 }
 
+tasks.sphinx {
+    sourceDirectory {"docs"}
+}
+
+project(":demo") {
+    apply(plugin = "application")
+    application.applicationName = "demo"
+    application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
+    dependencies {
+        implementation(project.rootProject)
+    }
+}
