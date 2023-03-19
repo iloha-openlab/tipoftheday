@@ -116,7 +116,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
         final JCheckBox showOnStartupBox;
 
-        // tip controls
+        // tip control
         JPanel controls = new JPanel(new BorderLayout());
         dialog.add("South", controls);
 
@@ -144,22 +144,16 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
         JButton closeButton = new JButton(UIManager.getString("TipOfTheDay.closeText", locale));
         buttons.add(closeButton);
 
-        final ActionListener saveChoice = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (choice != null) {
-                    choice.setShowingOnStartup(showOnStartupBox.isSelected());
-                }
-                dialog.setVisible(false);
+        final ActionListener saveChoice = e -> {
+            if (choice != null) {
+                choice.setShowingOnStartup(showOnStartupBox.isSelected());
             }
+            dialog.setVisible(false);
         };
 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.setVisible(false);
-                saveChoice.actionPerformed(null);
-            }
+        closeButton.addActionListener(e -> {
+            dialog.setVisible(false);
+            saveChoice.actionPerformed(null);
         });
         dialog.getRootPane().setDefaultButton(closeButton);
 
@@ -290,6 +284,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
                     editor.setBorder(null);
                     editor.setMargin(null);
                     editor.setOpaque(false);
+                    editor.setFont(tipFont);
                     tipScroll.getViewport().setView(editor);
                 } else {
                     JTextArea area = new JTextArea(text);
@@ -300,6 +295,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
                     area.setBorder(null);
                     area.setMargin(null);
                     area.setOpaque(false);
+                    area.setFont(tipFont);
                     tipScroll.getViewport().setView(area);
                 }
 
