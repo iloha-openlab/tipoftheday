@@ -393,7 +393,7 @@ public class JXTipOfTheDay extends JPanel {
      */
     public boolean showDialog(Component parentComponent, ShowOnStartupChoice choice, boolean force) {
         if (choice == null) {
-            JDialog dialog = createDialog(parentComponent, choice);
+            JDialog dialog = createDialog(parentComponent, null);
             dialog.setVisible(true);
             dialog.dispose();
             return true;

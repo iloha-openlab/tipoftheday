@@ -105,7 +105,7 @@ public abstract class LookAndFeelAddons {
         setTrackingLookAndFeelChanges(true);
     }
 
-    private static LookAndFeelAddons currentAddon;
+    private static volatile LookAndFeelAddons currentAddon;
 
     /**
      * Determines if the addon is a match for the {@link UIManager#getLookAndFeel() current Look and
