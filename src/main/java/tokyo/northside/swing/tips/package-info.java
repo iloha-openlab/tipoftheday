@@ -1,8 +1,6 @@
 /*
- * $Id: package-info.java 3167 2009-01-02 13:28:04Z rah003 $
- *
- * Copyright 2009 Sun Microsystems, Inc., 4150 Network Circle,
- * Santa Clara, California 95054, U.S.A. All rights reserved.
+ * Copyright 2009 Sun Microsystems, Inc.
+ *           2023 Hiroshi Miura
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

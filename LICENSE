@@ -1,3 +1,10 @@
+Copyright 2023 Hiroshi Miura
+All project materials are licensed under LGPL-2.1 or later.
+
+The project is forked and subset from SwingX project.
+Original license and copyright terms are as follows.
+-------
+
 Copyright (c) 2005-2006 Sun Microsystems, Inc., 4150 Network Circle, Santa
 Clara, California 95054, U.S.A. All rights reserved.  Use is subject
 to license terms below.  Sun, Sun Microsystems and the Sun logo are
@@ -8,6 +15,8 @@ Notice: This product is covered by U.S. export control laws and may be
 subject to the export or import laws in other countries. These laws may
 restrict the fields of use for this software and may require you to
 secure government authorization.
+
+------
  
             GNU LESSER GENERAL PUBLIC LICENSE
                Version 2.1, February 1999

@@ -1,8 +1,7 @@
 /*
- * $Id: TipOfTheDayModel.java 542 2005-10-10 18:03:15Z rbair $
  *
- * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
- * Santa Clara, California 95054, U.S.A. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc.
+ *           2023 Hiroshi Miura
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -24,7 +24,7 @@ Fork of SwingX project.
 
 ## License
 
-LGPL-2.1
+LGPL-2.1-or-later
 
 ## Copyright
 
