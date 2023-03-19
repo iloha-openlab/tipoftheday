@@ -22,8 +22,9 @@ package tokyo.northside.swing;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.util.prefs.Preferences;
-import javax.swing.*;
-
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 import tokyo.northside.swing.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.swing.plaf.TipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
