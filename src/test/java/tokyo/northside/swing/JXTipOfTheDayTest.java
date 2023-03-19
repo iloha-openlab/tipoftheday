@@ -50,7 +50,7 @@ public class JXTipOfTheDayTest {
     DefaultTipOfTheDayModel model = new DefaultTipOfTheDayModel();
     model.add(new DefaultTip("name1", "description1"));
     model.add(new DefaultTip("name2", "<html>description2"));
-    // model.add(new DefaultTip("name3", new EmptyIcon()));
+    model.add(new DefaultTip("name3", new ImageIcon()));
     model.add(new DefaultTip("name3", new JTree()));
 
     totd.setModel(model);

@@ -316,13 +316,13 @@ public abstract class LookAndFeelAddons {
                 @Override
                 public String run() {
                     return System.getProperty(
-                            "swing.crossplatformlafaddon", "org.jdesktop.swingx.plaf.metal.MetalLookAndFeelAddons");
+                            "swing.crossplatformlafaddon", "tokyo.northside.swing.plaf.MetalLookAndFeelAddons");
                 }
             });
         } catch (SecurityException ignore) {
         }
 
-        return "org.jdesktop.swingx.plaf.metal.MetalLookAndFeelAddons";
+        return "tokyo.northside.plaf.MetalLookAndFeelAddons";
     }
 
     /**
@@ -434,9 +434,9 @@ public abstract class LookAndFeelAddons {
                 logger.fine("Existing UI defaults keys: "
                         + new ArrayList<Object>(UIManager.getDefaults().keySet()));
             }
-            // really ugly hack. Should be removed as soon as we figure out what is causing the
+            // hideous hack. Should be removed as soon as we figure out what is causing the
             // issue
-            uiClassname = "org.jdesktop.swingx.plaf.basic.Basic" + expectedUIClass.getSimpleName();
+            uiClassname = "tokyo.northside.swing.plaf.Basic" + expectedUIClass.getSimpleName();
         }
         try {
             Class<?> uiClass = Class.forName(uiClassname);
