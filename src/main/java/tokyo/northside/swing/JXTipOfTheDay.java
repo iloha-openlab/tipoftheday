@@ -24,7 +24,6 @@ import java.awt.HeadlessException;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-
 import tokyo.northside.swing.plaf.TipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;

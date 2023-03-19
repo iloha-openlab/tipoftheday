@@ -19,8 +19,9 @@
  */
 package tokyo.northside.swing.plaf;
 
-import tokyo.northside.swing.JXTipOfTheDay;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,9 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
+import tokyo.northside.swing.JXTipOfTheDay;
 
 /**
  * Default implementation of the <code>JXTipOfTheDay</code> UI.
@@ -41,7 +40,6 @@ import java.awt.Font;
  * @author Hiroshi Miura
  */
 public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
-
 
     public DefaultTipOfTheDayUI(JXTipOfTheDay tipPane) {
         super(tipPane);
@@ -100,8 +98,10 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         defaults.put("TipOfTheDay.font", tipOfTheDayFont);
         defaults.put("TipOfTheDay.tipFont", new FontUIResource(font));
         defaults.put("TipOfTheDay.background", new ColorUIResource(Color.WHITE));
-        defaults.put("TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
-        defaults.put("TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
+        defaults.put(
+                "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
+        defaults.put(
+                "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
         // TODO: Add resource
         // "TipOfTheDay.didYouKnowText"
     }
