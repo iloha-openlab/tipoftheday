@@ -3,17 +3,15 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    groovy
-    java
+    `java-library`
+    `maven-publish`
     checkstyle
     jacoco
-    // application
-    // distribution
-    kotlin("jvm") version "1.7.0"
+    signing
     id("com.github.spotbugs") version "5.0.9"
-    id("com.diffplug.spotless") version "6.7.2"
-    id("com.github.kt3k.coveralls") version "2.12.0"
-    id("com.palantir.git-version") version "0.12.3" apply false
+    id("com.diffplug.spotless") version "6.8.0"
+    id("com.palantir.git-version") version "0.13.0" apply false
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 fun getProps(f: File): Properties {
@@ -59,15 +57,6 @@ tasks.getByName("jar") {
 }
 
 group = "tokyo.northside"
-version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-//application {
-//    mainClass.set("")
-//}
-//application.applicationDistribution.into("") {
-//    from("README.md", "COPYING")
-//}
 
 repositories {
     mavenCentral()
@@ -75,8 +64,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.apache.groovy:groovy-all:4.0.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
@@ -110,13 +98,9 @@ jacoco {
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
-        xml.required.set(true) // coveralls plugin depends on xml format report
+        xml.required.set(false)
         html.required.set(true)
     }
-}
-
-coveralls {
-    jacocoReportPath = "build/reports/jacoco/test/jacocoTestReport.xml"
 }
 
 tasks.withType<JavaCompile> {
@@ -124,13 +108,29 @@ tasks.withType<JavaCompile> {
     options.compilerArgs.add("-Xlint:unchecked")
 }
 
-// Disable .tar distributions
-// tasks.getByName("distTar").enabled = false
-// distributions {
-//     create("source") {
-//         contents {
-//             from (".")
-//             exclude ("out", "build", ".gradle", ".github", ".idea", ".gitignore")
-//         }
-//     }
-// }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+nexusPublishing {
+    repositories{
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username.set(project.property("sonatypeUsername")?.toString()?: System.getenv("SONATYPE_USER"))
+            password.set(project.property("sonatypePassword")?.toString()?: System.getenv("SONATYPE_PASS"))
+        }
+    }
+}
+
+spotless {
+    java {
+        target(listOf("src/*/java/**/*.java"))
+        removeUnusedImports()
+        palantirJavaFormat()
+    }
+}
