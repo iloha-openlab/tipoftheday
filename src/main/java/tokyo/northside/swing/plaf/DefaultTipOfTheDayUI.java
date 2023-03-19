@@ -102,12 +102,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
                 "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
         defaults.put(
                 "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
-        // TODO: Add localized resources
-        // "TipOfTheDay.dialogTitle"
-        // "TipOfTheDay.didYouKnowText"
-        // "TipOfTheDay.showOnStartupText"
-        // "TipOfTheDay.previousTipText"
-        // "TipOfTheDay.nextTipText"
-        // "TipOfTheDay.closeText"
+        defaults.addResourceBundle("TipOfTheDay");
     }
 }
