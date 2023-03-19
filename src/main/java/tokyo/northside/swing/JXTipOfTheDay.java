@@ -1,8 +1,7 @@
 /*
- * $Id: JXTipOfTheDay.java 4147 2012-02-01 17:13:24Z kschaefe $
  *
- * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
- * Santa Clara, California 95054, U.S.A. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc.
+ *           2023 Hiroshi Miura
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,8 +25,6 @@ import java.util.prefs.Preferences;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import tokyo.northside.swing.plaf.LookAndFeelAddons;
-import tokyo.northside.swing.plaf.TipOfTheDayAddon;
 import tokyo.northside.swing.plaf.TipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
@@ -120,12 +117,7 @@ public class JXTipOfTheDay extends JPanel {
     /**
      * JXTipOfTheDay pluggable UI key <i>swingx/TipOfTheDayUI</i>
      */
-    public static final String uiClassID = "swingx/TipOfTheDayUI";
-
-    // ensure at least the default ui is registered
-    static {
-        LookAndFeelAddons.contribute(new TipOfTheDayAddon());
-    }
+    public static final String uiClassID = "TipOfTheDayUI";
 
     /**
      * Key used to store the status of the "Show tip on startup" checkbox"
@@ -168,7 +160,8 @@ public class JXTipOfTheDay extends JPanel {
      */
     @Override
     public void updateUI() {
-        setUI((TipOfTheDayUI) LookAndFeelAddons.getUI(this, TipOfTheDayUI.class));
+        // FIXME.
+        setUI(getUI());
     }
 
     /**
