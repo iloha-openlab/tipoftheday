@@ -9,7 +9,7 @@ plugins {
     jacoco
     signing
     id("com.github.spotbugs") version "5.0.9"
-    id("com.diffplug.spotless") version "6.8.0"
+    id("com.diffplug.spotless") version "6.15.0"
     id("com.palantir.git-version") version "0.13.0" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
@@ -116,6 +116,59 @@ java {
     withJavadocJar()
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("tipoftheday")
+                description.set("Java Swing Tip of the Day component library")
+                url.set("https://codeberg.org/miurahr/tipoftheday")
+                licenses {
+                    license {
+                        name.set("The GNU Lesser General Public License, Version 2.1")
+                        url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("miurahr")
+                        name.set("Hiroshi Miura")
+                        email.set("miurahr@linux.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://codeberg.org/miurahr/tipoftheday.git")
+                    developerConnection.set("scm:git:git://codeberg.org/miurahr/tipoftheday.git")
+                    url.set("https://codeberg.org/miurahr/tipoftheday")
+                }
+            }
+        }
+    }
+}
+
+val signKey = listOf("signingKey", "signing.keyId", "signing.gnupg.keyName").find {project.hasProperty(it)}
+signing {
+    when (signKey) {
+        "signingKey" -> {
+            val signingKey: String? by project
+            val signingPassword: String? by project
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
+        "signing.keyId" -> {
+            val keyId: String? by project
+            val password: String? by project
+            val secretKeyRingFile: String? by project // e.g. gpg --export-secret-keys > secring.gpg
+            useInMemoryPgpKeys(keyId, password, secretKeyRingFile)
+        }
+        "signing.gnupg.keyName" -> {
+            useGpgCmd()
+        }
+    }
+    sign(publishing.publications["mavenJava"])
+}
+
 nexusPublishing {
     repositories{
         sonatype {
@@ -128,9 +181,22 @@ nexusPublishing {
 }
 
 spotless {
+    format("misc") {
+        target(listOf("*.gradle", ".gitignore", "*.rst"))
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    format("styling") {
+        target(listOf("*.md"))
+        prettier()
+    }
     java {
         target(listOf("src/*/java/**/*.java"))
-        removeUnusedImports()
         palantirJavaFormat()
+        importOrder()
+        removeUnusedImports()
+        formatAnnotations()
     }
 }
+
