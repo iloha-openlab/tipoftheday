@@ -18,7 +18,7 @@
  *
  */
 /**    Provides classes and interfaces for dealing with
- * <code>org.jdesktop.swingx.JXTipOfTheDay.</code>
+ * <code>tokyo.northside.swing.JXTipOfTheDay.</code>
  *
  * <h2>Related Documentation</h2>
  */
