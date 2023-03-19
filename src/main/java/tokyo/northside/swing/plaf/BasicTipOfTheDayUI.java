@@ -63,7 +63,8 @@ import tokyo.northside.swing.tips.Tip;
 /**
  * Base implementation of the <code>JXTipOfTheDay</code> UI.
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public class BasicTipOfTheDayUI extends TipOfTheDayUI {
 

@@ -23,6 +23,9 @@ import tokyo.northside.swing.JXTipOfTheDay;
 
 /**
  * A tip.<br>
+ *
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public interface Tip {
 

@@ -27,11 +27,12 @@ import java.util.List;
 /**
  * Default {@link TipOfTheDayModel} implementation.<br>
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public class DefaultTipOfTheDayModel implements TipOfTheDayModel {
 
-    private List<Tip> tips = new ArrayList<Tip>();
+    private final List<Tip> tips = new ArrayList<>();
 
     public DefaultTipOfTheDayModel() {}
 

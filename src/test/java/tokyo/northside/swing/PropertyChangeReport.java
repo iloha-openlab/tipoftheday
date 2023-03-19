@@ -1,8 +1,7 @@
 /*
- * $Id: PropertyChangeReport.java 4164 2012-02-14 11:53:10Z kleopatra $
+ * Copyright 2004 Sun Microsystems, Inc.
+ *           2023 Hiroshi Miura
  *
- * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
- * Santa Clara, California 95054, U.S.A. All rights reserved.
  */
 
 package tokyo.northside.swing;

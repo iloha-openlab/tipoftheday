@@ -79,9 +79,9 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * tips.load(new FileInputStream("tips.properties"));
  *
  * TipOfTheDayModel model = TipLoader.load(tips);
- * JXTipOfTheDay totd = new JXTipOfTheDay(model);
+ * JXTipOfTheDay tipOfTheDay = new JXTipOfTheDay(model);
  *
- * totd.showDialog(someParentComponent);
+ * tipOfTheDay.showDialog(someParentComponent);
  * </code>
  * </pre>
  *
@@ -94,7 +94,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * <pre>
  * <code>
  * Preferences userPreferences = Preferences.userRoot().node("myApp");
- * totd.showDialog(someParentComponent, userPreferences);
+ * tipOfTheDay.showDialog(someParentComponent, userPreferences);
  * </code>
  * </pre>
  * In this code, the first time showDialog is called, the dialog will be made
@@ -109,7 +109,8 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * @see #showDialog(Component, Preferences)
  * @see #showDialog(Component, ShowOnStartupChoice)
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public class JXTipOfTheDay extends JPanel {
 
@@ -143,7 +144,7 @@ public class JXTipOfTheDay extends JPanel {
      * Constructs a new <code>JXTipOfTheDay</code> showing tips from the given
      * TipOfTheDayModel.
      *
-     * @param model
+     * @param model model of the UI.
      */
     public JXTipOfTheDay(TipOfTheDayModel model) {
         this.model = model;
@@ -170,8 +171,6 @@ public class JXTipOfTheDay extends JPanel {
      *          the <code>TipOfTheDayUI</code> L&amp;F object
      * @see javax.swing.UIDefaults#getUI
      *
-     * @beaninfo bound: true hidden: true description: The UI object that
-     *           implements the taskpane group's LookAndFeel.
      */
     public void setUI(TipOfTheDayUI ui) {
         super.setUI(ui);
@@ -219,7 +218,7 @@ public class JXTipOfTheDay extends JPanel {
     /**
      * Sets the index of the tip to show
      *
-     * @param currentTip
+     * @param currentTip current tip index.
      * @throws IllegalArgumentException if currentTip is not within the bounds [0,
      *        getModel().getTipCount()[.
      */
@@ -269,7 +268,7 @@ public class JXTipOfTheDay extends JPanel {
     /**
      * Pops up a "Tip of the day" dialog.
      *
-     * @param parentComponent
+     * @param parentComponent parent ui component on which pop-up is shown.
      * @exception HeadlessException
      *              if GraphicsEnvironment.isHeadless() returns true.
      * @see java.awt.GraphicsEnvironment#isHeadless
@@ -283,8 +282,8 @@ public class JXTipOfTheDay extends JPanel {
      * "Show tips on startup" checkbox in a key named "ShowTipOnStartup" in the
      * given Preferences.
      *
-     * @param parentComponent
-     * @param showOnStartupPref
+     * @param parentComponent parent component of pop-ups.
+     * @param showOnStartupPref boolean to show tip when startup.
      * @exception HeadlessException
      *              if GraphicsEnvironment.isHeadless() returns true.
      * @throws IllegalArgumentException
@@ -301,8 +300,8 @@ public class JXTipOfTheDay extends JPanel {
      * "Show tips on startup" checkbox in a key named "ShowTipOnStartup" in the
      * given Preferences.
      *
-     * @param parentComponent
-     * @param showOnStartupPref
+     * @param parentComponent parent ui component on which tip pop-ups show.
+     * @param showOnStartupPref boolean to show pop-up when startup.
      * @param force
      *          if true, the dialog is displayed even if the Preferences is set to
      *          hide the dialog
@@ -329,7 +328,7 @@ public class JXTipOfTheDay extends JPanel {
             @Override
             public void setShowingOnStartup(boolean showOnStartup) {
                 if (showOnStartup && !showOnStartupPref.getBoolean(PREFERENCE_KEY, true)) {
-                    // if the choice was previously not enable and now we re-enable it, we
+                    // if the choice was previously not enable, and now we re-enable it, we
                     // must remove the key
                     showOnStartupPref.remove(PREFERENCE_KEY);
                 } else if (!showOnStartup) {
@@ -343,16 +342,15 @@ public class JXTipOfTheDay extends JPanel {
 
     /**
      * Pops up a "Tip of the day" dialog.
-     *
+     * <p>
      * If <code>choice</code> is not null, the method first checks if
      * {@link ShowOnStartupChoice#isShowingOnStartup()} is true before showing the
      * dialog.
-     *
      * Additionally, it saves the state of the "Show tips on startup" checkbox
      * using the given {@link ShowOnStartupChoice} object.
      *
-     * @param parentComponent
-     * @param choice
+     * @param parentComponent parent ui component on which pop-up is shown.
+     * @param choice choice to show it on startup.
      * @exception HeadlessException
      *              if GraphicsEnvironment.isHeadless() returns true.
      * @see java.awt.GraphicsEnvironment#isHeadless
@@ -364,17 +362,16 @@ public class JXTipOfTheDay extends JPanel {
 
     /**
      * Pops up a "Tip of the day" dialog.
-     *
+     * <p>
      * If <code>choice</code> is not null, the method first checks if
      * <code>force</code> is true or if
      * {@link ShowOnStartupChoice#isShowingOnStartup()} is true before showing the
      * dialog.
-     *
      * Additionally, it saves the state of the "Show tips on startup" checkbox
      * using the given {@link ShowOnStartupChoice} object.
      *
-     * @param parentComponent
-     * @param choice
+     * @param parentComponent parent ui component on which pop-up is shown.
+     * @param choice choice to show when startup.
      * @param force
      *          if true, the dialog is displayed even if
      *          {@link ShowOnStartupChoice#isShowingOnStartup()} is false
@@ -400,7 +397,7 @@ public class JXTipOfTheDay extends JPanel {
     }
 
     /**
-     * @param showOnStartupPref
+     * @param showOnStartupPref preference to show on startup.
      * @return true if the key named "ShowTipOnStartup" is not set to false
      */
     public static boolean isShowingOnStartup(Preferences showOnStartupPref) {
@@ -412,7 +409,7 @@ public class JXTipOfTheDay extends JPanel {
      * ensure the dialog shown by a later call to
      * {@link #showDialog(Component, Preferences)} will be visible to the user.
      *
-     * @param showOnStartupPref
+     * @param showOnStartupPref preference to show on startup.
      */
     public static void forceShowOnStartup(Preferences showOnStartupPref) {
         showOnStartupPref.remove(PREFERENCE_KEY);
@@ -421,12 +418,12 @@ public class JXTipOfTheDay extends JPanel {
     /**
      * Calls
      * {@link TipOfTheDayUI#createDialog(Component, ShowOnStartupChoice)}.
-     *
+     * <p>
      * This method can be overriden in order to control things such as the
      * placement of the dialog or its title.
      *
-     * @param parentComponent
-     * @param choice
+     * @param parentComponent parent ui component on which pop-up is shown.
+     * @param choice choice of tip when shown startup.
      * @return a JDialog to show this TipOfTheDay pane
      */
     protected JDialog createDialog(Component parentComponent, ShowOnStartupChoice choice) {
@@ -438,7 +435,7 @@ public class JXTipOfTheDay extends JPanel {
      * {@link JXTipOfTheDay#showDialog(Component, ShowOnStartupChoice)} to save the
      * "Show tips on startup" choice.
      */
-    public static interface ShowOnStartupChoice {
+    public interface ShowOnStartupChoice {
 
         /**
          * Persists the user choice

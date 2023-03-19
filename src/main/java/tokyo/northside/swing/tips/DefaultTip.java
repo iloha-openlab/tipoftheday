@@ -22,7 +22,8 @@ package tokyo.northside.swing.tips;
 /**
  * Default {@link Tip} implementation.<br>
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public class DefaultTip implements Tip {
 

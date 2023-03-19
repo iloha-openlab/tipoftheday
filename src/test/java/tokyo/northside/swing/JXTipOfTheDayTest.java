@@ -1,7 +1,7 @@
 /**
- * @PROJECT.FULLNAME@ @VERSION@ License.
  *
- * Copyright @YEAR@ L2FProd.com
+ * Copyright 2004 Sun Microsystems, Inc.
+ *           2023 Hiroshi Miura
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
+import tokyo.northside.swing.tips.Tip;
 import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
@@ -50,6 +51,9 @@ public class JXTipOfTheDayTest {
         model.add(new DefaultTip("name2", "<html>description2"));
         model.add(new DefaultTip("name3", new ImageIcon()));
         model.add(new DefaultTip("name3", new JTree()));
+        Tip tmpTip = new DefaultTip("name4", new JTable());
+        model.add(tmpTip);
+        model.remove(tmpTip);
 
         totd.setModel(model);
         assertTrue(report.hasEvents("model"));

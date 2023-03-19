@@ -24,7 +24,8 @@ import tokyo.northside.swing.JXTipOfTheDay;
 /**
  * A model for {@link JXTipOfTheDay}.<br>
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public interface TipOfTheDayModel {
 
@@ -34,7 +35,7 @@ public interface TipOfTheDayModel {
     int getTipCount();
 
     /**
-     * @param index
+     * @param index a tip text index to show.
      * @return the tip at <code>index</code>
      * @throws IndexOutOfBoundsException
      *           if the index is out of range (index &lt; 0 || index &gt;=

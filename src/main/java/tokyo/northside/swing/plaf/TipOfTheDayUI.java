@@ -27,7 +27,8 @@ import tokyo.northside.swing.JXTipOfTheDay;
 /**
  * Pluggable UI for <code>JXTipOfTheDay</code>.
  *
- * @author <a href="mailto:fred@L2FProd.com">Frederic Lavigne</a>
+ * @author Frederic Lavigne
+ * @author Hiroshi Miura
  */
 public abstract class TipOfTheDayUI extends PanelUI {
 
