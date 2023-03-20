@@ -19,6 +19,7 @@ Contents
 .. toctree::
    :maxdepth: 1
 
+   HowToUse
    SECURITY
    CONTRIBUTE
    CODE_OF_CONDUCT
