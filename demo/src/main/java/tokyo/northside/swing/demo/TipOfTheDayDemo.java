@@ -110,10 +110,23 @@ public class TipOfTheDayDemo extends JPanel {
             totd1.nextTip();
         });
 
+        JXTipOfTheDay.ShowOnStartupChoice choice = new JXTipOfTheDay.ShowOnStartupChoice() {
+            @Override
+            public void setShowingOnStartup(boolean showOnStartup) {
+                // Save to storage.
+            }
+
+            @Override
+            public boolean isShowingOnStartup() {
+                // true when preference is to show "Tip of the Day" dialog on start-up.
+                return true;
+            }
+        };
+
         dialogButton.addActionListener(actionEvent -> {
             JXTipOfTheDay totd = new JXTipOfTheDay(model);
             totd.setCurrentTip(0);
-            totd.showDialog(TipOfTheDayDemo.this);
+            totd.showDialog(TipOfTheDayDemo.this, choice, true);
         });
 
         closeButton.addActionListener(actionEvent -> {
