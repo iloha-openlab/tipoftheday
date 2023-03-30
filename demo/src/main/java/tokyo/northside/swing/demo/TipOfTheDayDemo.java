@@ -156,14 +156,15 @@ public class TipOfTheDayDemo extends JPanel {
 
         // an Icon
         tips.add(new DefaultTip("Icon Tip", new ImageIcon(
-                Objects.requireNonNull(TipOfTheDayDemo.class.getResource("TipOfTheDayDemo.png")))));
+                Objects.requireNonNull(TipOfTheDayDemo.class.getClassLoader().getResource("tips/demo/images/TipOfTheDayDemo.png")))));
 
-        try (InputStream is = getClass().getResourceAsStream("TipOfTheDayDemo.html")) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/demo/TipOfTheDayDemo.html")) {
             if (is != null) {
-                tips.add(new DefaultTip("HTML file", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
+                tips.add(new DefaultTip("Simple HTML file", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
             }
         } catch (IOException ignored) {
         }
+
         return tips;
     }
 }
