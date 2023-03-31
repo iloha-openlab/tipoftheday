@@ -56,7 +56,7 @@ public class DefaultTip implements Tip {
         this.name = name;
     }
 
-    static Tip of(String name, Object value) {
+    public static Tip of(String name, Object value) {
       return new DefaultTip(name, value);
     }
 

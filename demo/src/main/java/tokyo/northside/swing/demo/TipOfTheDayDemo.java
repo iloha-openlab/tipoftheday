@@ -21,9 +21,15 @@ package tokyo.northside.swing.demo;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import javax.swing.BorderFactory;
@@ -37,6 +43,7 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 
 import tokyo.northside.swing.JXTipOfTheDay;
+import tokyo.northside.swing.data.HtmlTipData;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
@@ -146,25 +153,90 @@ public class TipOfTheDayDemo extends JPanel {
                 + "This is the first tip\n" + "This is the first tip " + "This is the first tip"));
 
         // html text
-        tips.add(new DefaultTip("HTML Text Tip", "<html>This is an html <b>TIP</b><br><center>"
+        tips.add(DefaultTip.of("HTML Text Tip", "<html>This is an html <b>TIP</b><br><center>"
                 + "<table border=\"1\">" + "<tr><td>1</td><td>entry 1</td></tr>"
                 + "<tr><td>2</td><td>entry 2</td></tr>" + "<tr><td>3</td><td>entry 3</td></tr>"
                 + "</table>"));
 
         // a Component
-        tips.add(new DefaultTip("Component Tip", new JTree()));
+        tips.add(DefaultTip.of("Component Tip", new JTree()));
 
         // an Icon
-        tips.add(new DefaultTip("Icon Tip", new ImageIcon(
-                Objects.requireNonNull(TipOfTheDayDemo.class.getClassLoader().getResource("tips/demo/images/TipOfTheDayDemo.png")))));
+        tips.add(DefaultTip.of("Icon Tip", new ImageIcon(
+                Objects.requireNonNull(TipOfTheDayDemo.class.getClassLoader().getResource("tips/TipOfTheDayDemo.png")))));
 
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/demo/TipOfTheDayDemo.html")) {
+        // HTML from resource
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/SimpleText.html")) {
             if (is != null) {
-                tips.add(new DefaultTip("Simple HTML file", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
+                tips.add(new DefaultTip("Simple HTML", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
             }
         } catch (IOException ignored) {
         }
 
+        // HTML file
+        URI tipsUri = getTipsFileURI("TipOfTheDayDemo.html");
+        try {
+            if (tipsUri != null) {
+                tips.add(DefaultTip.of("HTML with image and style", HtmlTipData.from(tipsUri)));
+            }
+        } catch (IOException ignored) {
+        }
         return tips;
     }
+
+    public static URI getTipsFileURI(String filename) {
+        return getTipsFileURI(null, filename);
+    }
+
+    public static URI getTipsFileURI(String lang, String filename) {
+        // find in install dir
+        String path = lang == null ? filename : lang + File.separator + filename;
+        File file = Paths.get(installDir(),"docs", "tips", path).toFile();
+        if (file.isFile()) {
+            return file.toURI();
+        }
+        // find in classpath
+        path = lang == null ? filename : lang + '/' + filename;
+        URL url = TipOfTheDayDemo.class.getResource('/' + "tips" + '/' + path);
+        if (url != null) {
+            try {
+                return url.toURI();
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return null;
+    }
+
+    /** Caching install dir */
+    private static String installDir = null;
+
+    /**
+     * Returns OmegaT installation directory.
+     */
+    public static String installDir() {
+        if (installDir == null) {
+            File file = null;
+            try {
+                URI sourceUri = TipOfTheDayDemo.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+                if (sourceUri.getScheme().equals("file")) {
+                    File uriFile = Paths.get(sourceUri).toFile();
+                    // If running from a JAR, get the enclosing folder
+                    // (the JAR is assumed to be at the installation root)
+                    if (uriFile.getName().endsWith(".jar")) {
+                        file = uriFile.getParentFile();
+                    } else {
+                        // Running from an IDE or build tool; use "$CWD/demo".
+                    }
+                }
+            } catch (URISyntaxException ignored) {
+            }
+            if (file == null) {
+                file = Paths.get(".").toFile();
+            }
+            installDir = file.getAbsolutePath();
+        }
+        return installDir;
+    }
+
 }

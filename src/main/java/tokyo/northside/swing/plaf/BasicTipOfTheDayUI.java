@@ -34,6 +34,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -53,11 +57,15 @@ import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
+import javax.swing.text.html.HTMLEditorKit;
+
 import tokyo.northside.swing.JXTipOfTheDay;
 import tokyo.northside.swing.JXTipOfTheDay.ShowOnStartupChoice;
+import tokyo.northside.swing.data.HtmlTipData;
 import tokyo.northside.swing.tips.Tip;
 
 /**
@@ -266,6 +274,31 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
                 currentTipComponent = (Component) tipObject;
             } else if (tipObject instanceof Icon) {
                 currentTipComponent = new JLabel((Icon) tipObject);
+            } else if (tipObject instanceof HtmlTipData) {
+                JScrollPane tipScroll = new JScrollPane();
+                tipScroll.setBorder(null);
+                tipScroll.setOpaque(false);
+                tipScroll.getViewport().setOpaque(false);
+                tipScroll.setBorder(null);
+                HtmlTipData data = (HtmlTipData)tipObject;
+                String text = data.getHtml();
+                JEditorPane editor = new JEditorPane("text/html", text);
+                editor.setFont(tipPane.getFont());
+                String css = data.getStylesheetPath();
+                if (css != null) {
+                    String cssText = null;
+                    try {
+                        cssText = Files.readString(Paths.get(css));
+                    } catch (IOException ignored) {
+                    }
+                    if (cssText != null) {
+                        HTMLEditorKit htmlEditorKit = (HTMLEditorKit) editor.getEditorKit();
+                        htmlEditorKit.getStyleSheet().addRule(cssText);
+                    }
+                }
+                editor.revalidate();
+                tipScroll.getViewport().setView(editor);
+                currentTipComponent = tipScroll;
             } else {
                 JScrollPane tipScroll = new JScrollPane();
                 tipScroll.setBorder(null);
@@ -278,9 +311,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
                 if (BasicHTML.isHTMLString(text)) {
                     JEditorPane editor = new JEditorPane("text/html", text);
                     editor.setFont(tipPane.getFont());
-                    //          BasicHTML.updateRenderer(editor, text);
-                    // XXX          SwingXUtilities.setHtmlFont( (HTMLDocument) editor.getDocument(),
-                    // tipPane.getFont());
+                    BasicHTML.updateRenderer(editor, text);
                     editor.setEditable(false);
                     editor.setBorder(null);
                     editor.setMargin(null);

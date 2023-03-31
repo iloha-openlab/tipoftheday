@@ -62,10 +62,10 @@ group = "tokyo.northside"
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
+    implementation("org.jsoup:jsoup:1.15.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
@@ -208,7 +208,11 @@ project(":demo") {
     apply(plugin = "application")
     application.applicationName = "demo"
     application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
+    repositories {
+        mavenCentral()
+    }
     dependencies {
         implementation(project.rootProject)
+        runtimeOnly("org.jsoup:jsoup:1.15.4")
     }
 }
