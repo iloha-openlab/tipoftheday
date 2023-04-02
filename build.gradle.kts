@@ -36,17 +36,17 @@ if (dotgit.exists()) {
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
     val baseVersion = details.lastTag.substring(1)
-    if (details.isCleanTag) {  // release version
-        version = baseVersion
+    version = if (details.isCleanTag) {  // release version
+        baseVersion
     } else {  // snapshot version
-        version = baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+        baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
     }
 } else if (props.exists()) { // when version.properties already exist, just use it.
     version = getProps(props).getProperty("version")
 }
 
 tasks.register("writeVersionFile") {
-    val folder = project.file("src/main/resources");
+    val folder = project.file("src/main/resources")
     if (!folder.exists()) {
         folder.mkdirs()
     }
@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jsoup:jsoup:1.15.4")
+    implementation("net.sf.cssbox:swingbox:1.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

@@ -54,7 +54,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         installKeyboardActions();
         installComponents(defaults);
         installListeners();
-
         showCurrentTip();
     }
 
