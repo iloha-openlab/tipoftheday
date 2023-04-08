@@ -60,27 +60,18 @@ tasks.getByName("jar") {
 
 group = "tokyo.northside"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation("net.sf.cssbox:swingbox:1.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
-spotbugs {
-    excludeFilter.set(project.file("config/spotbugs/exclude.xml"))
-    tasks.spotbugsMain {
-        reports.create("html") {
-            required.set(true)
-        }
+allprojects {
+    apply(plugin="java-library")
+    repositories {
+        mavenCentral()
     }
-    tasks.spotbugsTest {
-        reports.create("html") {
-            required.set(true)
-        }
+    dependencies {
+        implementation("tokyo.northside:swingbox:1.2.2")
     }
 }
 
@@ -179,7 +170,6 @@ nexusPublishing {
         }
     }
 }
-
 spotless {
     format("misc") {
         target(listOf("*.gradle", ".gitignore", "*.rst"))
@@ -200,6 +190,20 @@ spotless {
     }
 }
 
+spotbugs {
+    excludeFilter.set(project.file("config/spotbugs/exclude.xml"))
+    tasks.spotbugsMain {
+        reports.create("html") {
+            required.set(true)
+        }
+    }
+    tasks.spotbugsTest {
+        reports.create("html") {
+            required.set(true)
+        }
+    }
+}
+
 tasks.sphinx {
     sourceDirectory {"docs"}
 }
@@ -208,11 +212,8 @@ project(":demo") {
     apply(plugin = "application")
     application.applicationName = "demo"
     application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
-    repositories {
-        mavenCentral()
-    }
     dependencies {
         implementation(project.rootProject)
-        runtimeOnly("org.jsoup:jsoup:1.15.4")
+        runtimeOnly("org.slf4j:slf4j-simple:1.7.25")
     }
 }
