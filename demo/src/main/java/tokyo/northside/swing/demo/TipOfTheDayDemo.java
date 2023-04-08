@@ -28,9 +28,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -41,9 +43,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-import tokyo.northside.swing.JXTipOfTheDay;
+import tokyo.northside.swing.TipOfTheDay;
 import tokyo.northside.swing.data.HtmlTipData;
+import tokyo.northside.swing.plaf.BasicTipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
@@ -61,7 +65,7 @@ public class TipOfTheDayDemo extends JPanel {
     private static final JFrame frame = new JFrame();
 
     /**
-     * main method allows us to run as a standalone demo.
+     * The main method allows us to run as a standalone demo.
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -72,7 +76,7 @@ public class TipOfTheDayDemo extends JPanel {
             panel.add(new JLabel("Following is embed version of Tip of the Day."));
             panel.add(new TipOfTheDayDemo());
             frame.getContentPane().add(panel);
-            frame.setPreferredSize(new Dimension(800, 400));
+            frame.setPreferredSize(new Dimension(950, 500));
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
@@ -87,8 +91,12 @@ public class TipOfTheDayDemo extends JPanel {
     private void createTipOfTheDayDemo() {
         model = createTipOfTheDayModel();
         JPanel panel = new JPanel();
-        JXTipOfTheDay totd1 = new JXTipOfTheDay(model);
-        totd1.setPreferredSize(new Dimension(400, 250));
+        TipOfTheDay totd1 = new TipOfTheDay(model);
+        // When you want to customize UI design, you can make your
+        // custom class inherit from BasicTipOfTheDayUI, and set it
+        // using setUI method.
+        // ex, totd1.setUI(new BasicTipOfTheDayUI(totd1));
+        totd1.setPreferredSize(new Dimension(900, 450));
         totd1.setName("totd");
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(totd1);
@@ -117,7 +125,7 @@ public class TipOfTheDayDemo extends JPanel {
             totd1.nextTip();
         });
 
-        JXTipOfTheDay.ShowOnStartupChoice choice = new JXTipOfTheDay.ShowOnStartupChoice() {
+        TipOfTheDay.ShowOnStartupChoice choice = new TipOfTheDay.ShowOnStartupChoice() {
             @Override
             public void setShowingOnStartup(boolean showOnStartup) {
                 // Save to storage.
@@ -131,7 +139,7 @@ public class TipOfTheDayDemo extends JPanel {
         };
 
         dialogButton.addActionListener(actionEvent -> {
-            JXTipOfTheDay totd = new JXTipOfTheDay(model);
+            TipOfTheDay totd = new TipOfTheDay(model);
             totd.setCurrentTip(0);
             totd.showDialog(TipOfTheDayDemo.this, choice, true);
         });
@@ -174,29 +182,32 @@ public class TipOfTheDayDemo extends JPanel {
         }
 
         // HTML file
-        URI tipsUri = getTipsFileURI("TipOfTheDayDemo.html");
-        try {
-            if (tipsUri != null) {
-                tips.add(DefaultTip.of("HTML with image and style", HtmlTipData.from(tipsUri)));
+        Map<String, URI> tipsUri = new TreeMap<>();
+        tipsUri.put("DAY 1", getTipsFileURI("day1.html"));
+        tipsUri.put("DAY 2", getTipsFileURI("day2.html"));
+        tipsUri.put("DAY 3", getTipsFileURI("day3.html"));
+        for (Map.Entry<String, URI> en: tipsUri.entrySet()) {
+            try {
+                tips.add(DefaultTip.of(en.getKey(), HtmlTipData.from(en.getValue())));
+            } catch (IOException ignored) {
             }
-        } catch (IOException ignored) {
         }
         return tips;
     }
 
     public static URI getTipsFileURI(String filename) {
-        return getTipsFileURI(null, filename);
+        return getTipsFileURI(filename, null);
     }
 
-    public static URI getTipsFileURI(String lang, String filename) {
-        // find in install dir
-        String path = lang == null ? filename : lang + File.separator + filename;
+    public static URI getTipsFileURI(String filename, Locale locale) {
+        // find in install_dir
+        String path = locale == null ? filename : locale.toLanguageTag() + File.separator + filename;
         File file = Paths.get(installDir(),"docs", "tips", path).toFile();
         if (file.isFile()) {
             return file.toURI();
         }
         // find in classpath
-        path = lang == null ? filename : lang + '/' + filename;
+        path = locale == null ? filename : locale.toLanguageTag() + '/' + filename;
         URL url = TipOfTheDayDemo.class.getResource('/' + "tips" + '/' + path);
         if (url != null) {
             try {
