@@ -39,9 +39,17 @@ You can create ``Tip`` object from properties.
    tip.2.description=&lt;html&gt;This is an html description
 
 
+HtmlTipData
+-----------
 
-JXTipOfTheDay
--------------
+Data class that represents HTML file URI, base path and its text.
+BasicTipOfTheDayUI and its children, DefaultTipOfTheDay show HTML contents
+using SwingBox library's "BrowserPane" component that can parse HTML5
+and CSS.
+
+
+TipOfTheDay
+-----------
 
 Controller of "Tip of the Day" UI component.
 Constructor requests the model.
