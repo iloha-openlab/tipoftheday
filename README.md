@@ -1,6 +1,6 @@
-# "Tip of the Day" extension for Java/Swing GUI framework
+# "Tip of the Day" extension for a Java/Swing GUI framework
 
-Provides the "Tip of The Day" pane and dialog.<br>
+Provides the "Tip of The Day" pane and dialog.
 
 ## Description
 
@@ -9,6 +9,11 @@ In the most common usage, a tip (as returned by `TipOfTheDayModel.Tip#getTip()`)
 is just a `String`. However, the return type of this method is actually `Object`.
 Its interpretation depends on its type:
 
+- HTML files
+  - You can show rich styled tips from HTML files, please look at a demo code.
+  - TipOfTheDay supports CSS, powered by CSSBox library.
+  - HtmlTipData class is a placeholder of HTML file.
+  - You can use HtmlTipData.from("path/to/html/file")
 - Component
   - The `Component` is displayed in the dialog.
 - Icon
