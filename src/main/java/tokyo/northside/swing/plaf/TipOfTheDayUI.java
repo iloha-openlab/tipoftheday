@@ -33,13 +33,13 @@ import tokyo.northside.swing.TipOfTheDay;
 public abstract class TipOfTheDayUI extends PanelUI {
 
     /**
-     * Creates a new JDialog to display a JXTipOfTheDay panel. If
-     * <code>choice</code> is not null then the window will offer a way for the
-     * end-user to not show the tip of the day dialog.
+     * Creates a new JDialog to display a TipOfTheDay panel.
+     * If <code>choice</code> is not null then the window will offer a way
+     * for the end-user to not show the tip of the day dialog.
      *
-     * @param parentComponent
-     * @param choice
-     * @return a new JDialog to display a JXTipOfTheDay panel
+     * @param parentComponent parent component for dialog.
+     * @param choice config of the choice.
+     * @return a new JDialog to display a TipOfTheDay panel
      */
     public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.ShowOnStartupChoice choice);
 }

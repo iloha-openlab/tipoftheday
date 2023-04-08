@@ -51,7 +51,7 @@ public class TipLoader {
      * </code>
      * </pre>
      *
-     * @param props
+     * @param props properties that hold tips.
      * @return a TipOfTheDayModel
      * @throws IllegalArgumentException
      *           if a name is found without description

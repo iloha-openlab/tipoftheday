@@ -41,7 +41,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * {@link Tip#getTip()}) is just a
  * <code>String</code>. However, the return type of this method is actually
  * <code>Object</code>. Its interpretation depends on its type:
- * <dl compact>
+ * <dl>
  * <dt>Component
  * <dd>The <code>Component</code> is displayed in the dialog.
  * <dt>Icon
@@ -140,6 +140,7 @@ public class TipOfTheDay extends JPanel {
      * TipOfTheDayModel.
      *
      * @param model model of the UI.
+     * @param showOnStartup true if show on startup, otherwise false.
      */
     public TipOfTheDay(TipOfTheDayModel model, boolean showOnStartup) {
         this.model = model;
@@ -272,6 +273,7 @@ public class TipOfTheDay extends JPanel {
      *              if GraphicsEnvironment.isHeadless() returns true.
      * @see java.awt.GraphicsEnvironment#isHeadless
      */
+    @SuppressWarnings("unused")
     public void showDialog(Component parentComponent) throws HeadlessException {
         showDialog(parentComponent, null);
     }
@@ -293,6 +295,7 @@ public class TipOfTheDay extends JPanel {
      * @return true if the user chooses to see the tips again, false
      *         otherwise.
      */
+    @SuppressWarnings("unused")
     public boolean showDialog(Component parentComponent, boolean force) throws HeadlessException {
 
         ShowOnStartupChoice store = new ShowOnStartupChoice() {
