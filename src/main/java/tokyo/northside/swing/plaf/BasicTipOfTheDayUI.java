@@ -22,7 +22,6 @@ package tokyo.northside.swing.plaf;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -37,31 +36,14 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 
 import org.fit.cssbox.swingbox.BrowserPane;
-import tokyo.northside.swing.JXTipOfTheDay;
-import tokyo.northside.swing.JXTipOfTheDay.ShowOnStartupChoice;
+import tokyo.northside.swing.TipOfTheDay;
+import tokyo.northside.swing.TipOfTheDay.ShowOnStartupChoice;
 import tokyo.northside.swing.data.HtmlTipData;
 import tokyo.northside.swing.tips.Tip;
 
@@ -74,18 +56,20 @@ import tokyo.northside.swing.tips.Tip;
 public class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     public static ComponentUI createUI(JComponent c) {
-        return new BasicTipOfTheDayUI((JXTipOfTheDay) c);
+        return new BasicTipOfTheDayUI((TipOfTheDay) c);
     }
 
-    protected JXTipOfTheDay tipPane;
+    protected TipOfTheDay tipPane;
     protected JPanel tipArea;
     protected Component currentTipComponent;
 
     protected Font tipFont;
     protected PropertyChangeListener changeListener;
 
-    public BasicTipOfTheDayUI(JXTipOfTheDay tipPane) {
+    public BasicTipOfTheDayUI(TipOfTheDay tipPane) {
+        super();
         this.tipPane = tipPane;
+        UIManager.getDefaults().addResourceBundle("tokyo.northside.swing.plaf.BasicTipOfTheDayUI");
     }
 
     @Override
@@ -224,23 +208,10 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     protected void installComponents() {
         tipPane.setLayout(new BorderLayout());
-
-        // tip icon
-        JLabel tipIcon = new JLabel(UIManager.getString("TipOfTheDay.didYouKnowText", tipPane.getLocale()));
-        tipIcon.setIcon(UIManager.getIcon("TipOfTheDay.icon"));
-        tipIcon.setBorder(BorderFactory.createEmptyBorder(22, 15, 22, 15));
-        tipPane.add("North", tipIcon);
-
-        // tip area
         tipArea = new JPanel(new BorderLayout(2, 2));
         tipArea.setOpaque(false);
         tipArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tipPane.add("Center", tipArea);
-    }
-
-    @Override
-    public Dimension getPreferredSize(JComponent c) {
-        return new Dimension(420, 175);
     }
 
     protected void showCurrentTip() {
@@ -280,6 +251,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
                     tipScroll.setOpaque(false);
                     tipScroll.getViewport().setOpaque(false);
                     tipScroll.setBorder(null);
+                    tipScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                     BrowserPane editor = new BrowserPane();
                     editor.setEditable(false);
                     editor.setPage(url);
@@ -349,7 +321,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
     class ChangeListener implements PropertyChangeListener {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (JXTipOfTheDay.CURRENT_TIP_CHANGED_KEY.equals(evt.getPropertyName())) {
+            if (TipOfTheDay.CURRENT_TIP_CHANGED_KEY.equals(evt.getPropertyName())) {
                 showCurrentTip();
             }
         }

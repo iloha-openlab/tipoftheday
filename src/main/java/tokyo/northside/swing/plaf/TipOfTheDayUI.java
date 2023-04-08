@@ -22,7 +22,7 @@ package tokyo.northside.swing.plaf;
 import java.awt.Component;
 import javax.swing.JDialog;
 import javax.swing.plaf.PanelUI;
-import tokyo.northside.swing.JXTipOfTheDay;
+import tokyo.northside.swing.TipOfTheDay;
 
 /**
  * Pluggable UI for <code>JXTipOfTheDay</code>.
@@ -41,5 +41,5 @@ public abstract class TipOfTheDayUI extends PanelUI {
      * @param choice
      * @return a new JDialog to display a JXTipOfTheDay panel
      */
-    public abstract JDialog createDialog(Component parentComponent, JXTipOfTheDay.ShowOnStartupChoice choice);
+    public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.ShowOnStartupChoice choice);
 }

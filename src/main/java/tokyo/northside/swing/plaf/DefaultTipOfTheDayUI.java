@@ -32,7 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
-import tokyo.northside.swing.JXTipOfTheDay;
+import tokyo.northside.swing.TipOfTheDay;
 
 /**
  * Default implementation of the <code>JXTipOfTheDay</code> UI.
@@ -41,7 +41,7 @@ import tokyo.northside.swing.JXTipOfTheDay;
  */
 public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
 
-    public DefaultTipOfTheDayUI(JXTipOfTheDay tipPane) {
+    public DefaultTipOfTheDayUI(TipOfTheDay tipPane) {
         super(tipPane);
     }
 
@@ -72,7 +72,7 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         // tip icon
         JLabel tipIcon = new JLabel(defaults.getString("TipOfTheDay.didYouKnowText", tipPane.getLocale()));
         tipIcon.setIcon(defaults.getIcon("TipOfTheDay.icon"));
-        tipIcon.setBorder(BorderFactory.createEmptyBorder(22, 15, 22, 15));
+        tipIcon.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         tipPane.add("North", tipIcon);
 
         // tip area
@@ -89,7 +89,7 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         }
         font = font.deriveFont(Font.BOLD, 13f);
 
-        defaults.put(JXTipOfTheDay.uiClassID, DefaultTipOfTheDayUI.class.getName());
+        defaults.put(TipOfTheDay.uiClassID, DefaultTipOfTheDayUI.class.getName());
         Font tipOfTheDayFont = UIManager.getFont("TextPane.font");
         if (tipOfTheDayFont == null) {
             tipOfTheDayFont = new Font("Serif", Font.PLAIN, 12);
@@ -98,9 +98,9 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         defaults.put("TipOfTheDay.tipFont", new FontUIResource(font));
         defaults.put("TipOfTheDay.background", new ColorUIResource(Color.WHITE));
         defaults.put(
-                "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "resources/TipOfTheDay24.gif"));
+                "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "TipOfTheDay24.gif"));
         defaults.put(
                 "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
-        defaults.addResourceBundle("tokyo.northside.swing.TipOfTheDay");
+        defaults.addResourceBundle("tokyo.northside.swing.plaf.DefaultTipOfTheDayUI");
     }
 }
