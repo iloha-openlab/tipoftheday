@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.0]
+
+- Support rich text with HTML5 and CSS parser.
+- Change development status Beta
+- Add DefaultTip.of method
+
 ## [v0.2.2]
 
 - Add contribution guide.
@@ -25,7 +31,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...HEAD
+[v0.3.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...v0.3.0
 [v0.2.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.0...v0.2.2
 [v0.2.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.1.0...v0.1.1
