@@ -21,17 +21,17 @@ import tokyo.northside.swing.tips.Tip;
 import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
-public class JXTipOfTheDayTest {
+public class TipOfTheDayTest {
 
     @Test
     public void testBean() {
         PropertyChangeReport report = new PropertyChangeReport();
-        JXTipOfTheDay totd = new JXTipOfTheDay();
+        TipOfTheDay totd = new TipOfTheDay();
         assertEquals(0, totd.getCurrentTip());
         // with an empty model next/previous are no-op
         totd.nextTip();
         totd.previousTip();
-        assertFalse(report.hasEvents(JXTipOfTheDay.CURRENT_TIP_CHANGED_KEY));
+        assertFalse(report.hasEvents(TipOfTheDay.CURRENT_TIP_CHANGED_KEY));
 
         totd.addPropertyChangeListener(report);
 
@@ -47,10 +47,10 @@ public class JXTipOfTheDayTest {
         totd.setModel(model);
         assertTrue(report.hasEvents("model"));
 
-        assertFalse(report.hasEvents(JXTipOfTheDay.CURRENT_TIP_CHANGED_KEY));
+        assertFalse(report.hasEvents(TipOfTheDay.CURRENT_TIP_CHANGED_KEY));
         assertEquals(0, totd.getCurrentTip());
         totd.nextTip();
-        assertTrue(report.hasEvents(JXTipOfTheDay.CURRENT_TIP_CHANGED_KEY));
+        assertTrue(report.hasEvents(TipOfTheDay.CURRENT_TIP_CHANGED_KEY));
         assertEquals(1, totd.getCurrentTip());
         totd.nextTip();
         assertEquals(2, totd.getCurrentTip());
@@ -137,7 +137,7 @@ public class JXTipOfTheDayTest {
 
     @Test
     public void testChoice() {
-        JXTipOfTheDay.ShowOnStartupChoice noshow = new JXTipOfTheDay.ShowOnStartupChoice() {
+        TipOfTheDay.ShowOnStartupChoice noshow = new TipOfTheDay.ShowOnStartupChoice() {
             public boolean isShowingOnStartup() {
                 return false;
             }
@@ -145,7 +145,7 @@ public class JXTipOfTheDayTest {
             public void setShowingOnStartup(boolean showOnStartup) {}
         };
 
-        JXTipOfTheDay totd = new JXTipOfTheDay();
+        TipOfTheDay totd = new TipOfTheDay();
         assertFalse(totd.showDialog(null, noshow));
     }
 }

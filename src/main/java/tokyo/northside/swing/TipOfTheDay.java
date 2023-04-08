@@ -100,10 +100,10 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-public class JXTipOfTheDay extends JPanel {
+public class TipOfTheDay extends JPanel {
 
     /**
-     * JXTipOfTheDay pluggable UI key <i>swingx/TipOfTheDayUI</i>
+     * TipOfTheDay pluggable UI key <i>TipOfTheDayUI</i>
      */
     public static final String uiClassID = "TipOfTheDayUI";
 
@@ -120,7 +120,7 @@ public class JXTipOfTheDay extends JPanel {
      * Constructs a new <code>JXTipOfTheDay</code> with an empty
      * TipOfTheDayModel
      */
-    public JXTipOfTheDay() {
+    public TipOfTheDay() {
         this(new DefaultTipOfTheDayModel(new Tip[0]));
     }
 
@@ -131,7 +131,7 @@ public class JXTipOfTheDay extends JPanel {
      *
      * @param model model of the UI.
      */
-    public JXTipOfTheDay(TipOfTheDayModel model) {
+    public TipOfTheDay(TipOfTheDayModel model) {
         this(model, true);
     }
 
@@ -141,7 +141,7 @@ public class JXTipOfTheDay extends JPanel {
      *
      * @param model model of the UI.
      */
-    public JXTipOfTheDay(TipOfTheDayModel model, boolean showOnStartup) {
+    public TipOfTheDay(TipOfTheDayModel model, boolean showOnStartup) {
         this.model = model;
         this.showOnStartUp = showOnStartup;
         updateUI();
@@ -298,12 +298,12 @@ public class JXTipOfTheDay extends JPanel {
         ShowOnStartupChoice store = new ShowOnStartupChoice() {
             @Override
             public boolean isShowingOnStartup() {
-                return JXTipOfTheDay.this.showOnStartUp;
+                return TipOfTheDay.this.showOnStartUp;
             }
 
             @Override
             public void setShowingOnStartup(boolean showOnStartup) {
-                JXTipOfTheDay.this.showOnStartUp = showOnStartup;
+                TipOfTheDay.this.showOnStartUp = showOnStartup;
             }
         };
         return showDialog(parentComponent, store, force);
@@ -382,7 +382,7 @@ public class JXTipOfTheDay extends JPanel {
 
     /**
      * Used in conjunction with the
-     * {@link JXTipOfTheDay#showDialog(Component, ShowOnStartupChoice)} to save the
+     * {@link TipOfTheDay#showDialog(Component, ShowOnStartupChoice)} to save the
      * "Show tips on startup" choice.
      */
     public interface ShowOnStartupChoice {

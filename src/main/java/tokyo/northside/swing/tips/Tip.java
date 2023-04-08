@@ -19,7 +19,7 @@
  */
 package tokyo.northside.swing.tips;
 
-import tokyo.northside.swing.JXTipOfTheDay;
+import tokyo.northside.swing.TipOfTheDay;
 
 /**
  * A tip.<br>
@@ -35,7 +35,7 @@ public interface Tip {
     String getTipName();
 
     /**
-     * The tip object to show. See {@link JXTipOfTheDay} for supported object
+     * The tip object to show. See {@link TipOfTheDay} for supported object
      * types.
      *
      * @return the tip to display
