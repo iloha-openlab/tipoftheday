@@ -53,6 +53,7 @@ import tokyo.northside.swing.tips.Tip;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
+@SuppressWarnings("unused")
 public class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     public static ComponentUI createUI(JComponent c) {
@@ -77,6 +78,7 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
         return createDialog(parentComponent, choice, true);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected JDialog createDialog(
             Component parentComponent, final ShowOnStartupChoice choice, boolean showPreviousButton) {
         Locale locale = parentComponent == null ? null : parentComponent.getLocale();
@@ -135,22 +137,26 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
         buttons.add(closeButton);
 
         final ActionListener saveChoice = e -> {
-            if (choice != null) {
-                choice.setShowingOnStartup(showOnStartupBox.isSelected());
+            ShowOnStartupChoice showOnStartupChoice = (ShowOnStartupChoice) e.getSource();
+            if (showOnStartupChoice != null && showOnStartupBox != null) {
+                showOnStartupChoice.setShowingOnStartup(showOnStartupBox.isSelected());
             }
-            dialog.setVisible(false);
         };
 
         closeButton.addActionListener(e -> {
+            if (choice != null) {
+                saveChoice.actionPerformed(new ActionEvent(choice, 0, null));
+            }
             dialog.setVisible(false);
-            saveChoice.actionPerformed(null);
         });
         dialog.getRootPane().setDefaultButton(closeButton);
 
         dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                saveChoice.actionPerformed(null);
+                if (choice != null) {
+                    saveChoice.actionPerformed(new ActionEvent(choice, 0, null));
+                }
             }
         });
 
