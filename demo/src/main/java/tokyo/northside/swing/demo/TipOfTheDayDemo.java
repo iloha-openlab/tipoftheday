@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -43,11 +44,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import tokyo.northside.swing.TipOfTheDay;
 import tokyo.northside.swing.data.HtmlTipData;
-import tokyo.northside.swing.plaf.BasicTipOfTheDayUI;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
@@ -59,10 +58,14 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * @author l2fprod (original JXTipOfTheDayDemoPanel)
  * @author Hiroshi Miura
  */
-@SuppressWarnings("serial")
 public class TipOfTheDayDemo extends JPanel {
     private TipOfTheDayModel model;
     private static final JFrame frame = new JFrame();
+    private final Preferences prefs;
+    private static final String PREFS_KEY = "tipsoftheday_demo_show_on_startup";
+    private static final String PREFS_NOT_SET = "prefs_not_set";
+    private static final String PREFS_YES = "true";
+    private static final String PREFS_NO = "false";
 
     /**
      * The main method allows us to run as a standalone demo.
@@ -85,6 +88,7 @@ public class TipOfTheDayDemo extends JPanel {
 
     public TipOfTheDayDemo() {
         super(new BorderLayout());
+        prefs = Preferences.userNodeForPackage(this.getClass());
         createTipOfTheDayDemo();
     }
 
@@ -118,23 +122,26 @@ public class TipOfTheDayDemo extends JPanel {
         buttonPanel.add(closeButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        previousTipButton.addActionListener(actionEvent -> {
-            totd1.previousTip();
-        });
-        nextTipButton.addActionListener(actionEvent -> {
-            totd1.nextTip();
-        });
+        previousTipButton.addActionListener(e -> totd1.previousTip());
+        nextTipButton.addActionListener(e -> totd1.nextTip());
 
         TipOfTheDay.ShowOnStartupChoice choice = new TipOfTheDay.ShowOnStartupChoice() {
             @Override
             public void setShowingOnStartup(boolean showOnStartup) {
                 // Save to storage.
+                // Demo uses Java Preferences feature.
+                if (showOnStartup) {
+                    prefs.put(PREFS_KEY, PREFS_YES);
+                } else {
+                    prefs.put(PREFS_KEY, PREFS_NO);
+                }
             }
 
             @Override
             public boolean isShowingOnStartup() {
                 // true when preference is to show "Tip of the Day" dialog on start-up.
-                return true;
+                String config = prefs.get(PREFS_KEY, PREFS_NOT_SET);
+                return config.equals(PREFS_NOT_SET) || config.equalsIgnoreCase("true");
             }
         };
 
@@ -236,8 +243,6 @@ public class TipOfTheDayDemo extends JPanel {
                     // (the JAR is assumed to be at the installation root)
                     if (uriFile.getName().endsWith(".jar")) {
                         file = uriFile.getParentFile();
-                    } else {
-                        // Running from an IDE or build tool; use "$CWD/demo".
                     }
                 }
             } catch (URISyntaxException ignored) {
