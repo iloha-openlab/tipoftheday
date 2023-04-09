@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.1]
+
+- fix: Null check in saveChoice action to avoid potential NPE
+- doc: Update javadoc
+
 ## [v0.3.0]
 
 - Support rich text with HTML5 and CSS parser.
@@ -19,7 +24,7 @@ All notable changes to this project will be documented in this file.
 - Add demo application as subproject
 - Implement `createUI` method
 - Fix bundle loading
-- Add Japanese bundle
+- Add a Japanese bundle
 - Use UTF-8 for bundle encoding
 - Add document for sphinx document solution.
 
@@ -31,7 +36,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...HEAD
+[v0.3.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...v0.3.0
 [v0.2.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.0...v0.2.2
 [v0.2.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.1.1...v0.2.0
