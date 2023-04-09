@@ -25,7 +25,7 @@ import javax.swing.plaf.PanelUI;
 import tokyo.northside.swing.TipOfTheDay;
 
 /**
- * Pluggable UI for <code>JXTipOfTheDay</code>.
+ * Pluggable UI for <code>TipOfTheDay</code>.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura

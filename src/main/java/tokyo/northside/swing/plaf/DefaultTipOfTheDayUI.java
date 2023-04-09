@@ -35,7 +35,7 @@ import javax.swing.plaf.FontUIResource;
 import tokyo.northside.swing.TipOfTheDay;
 
 /**
- * Default implementation of the <code>JXTipOfTheDay</code> UI.
+ * Default implementation of the <code>TipOfTheDay</code> UI.
  *
  * @author Hiroshi Miura
  */

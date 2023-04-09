@@ -48,7 +48,7 @@ import tokyo.northside.swing.data.HtmlTipData;
 import tokyo.northside.swing.tips.Tip;
 
 /**
- * Base implementation of the <code>JXTipOfTheDay</code> UI.
+ * Base implementation of the <code>TipOfTheDay</code> UI.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura

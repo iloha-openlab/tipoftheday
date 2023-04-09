@@ -54,7 +54,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * </dl>
  *
  * <p>
- * <code>JXTipOfTheDay</code> finds its tips in its {@link TipOfTheDayModel}.
+ * <code>TipOfTheDay</code> finds its tips in its {@link TipOfTheDayModel}.
  * Such model can be programmatically built using {@link DefaultTipOfTheDayModel}
  * and {@link DefaultTip} but
  * the {@link TipLoader} provides a convenient method to
@@ -80,14 +80,14 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * tips.load(new FileInputStream("tips.properties"));
  *
  * TipOfTheDayModel model = TipLoader.load(tips);
- * JXTipOfTheDay tipOfTheDay = new JXTipOfTheDay(model);
+ * TipOfTheDay tipOfTheDay = new TipOfTheDay(model);
  *
  * tipOfTheDay.showDialog(someParentComponent);
  * </code>
  * </pre>
  *
  * <p>
- * Additionally, <code>JXTipOfTheDay</code> features an option enabling
+ * Additionally, <code>TipOfTheDay</code> features an option enabling
  * the end-user to choose to not display the "Tip Of The Day" dialog.
  * This user choice can be stored in custom storage through
  * the {@link ShowOnStartupChoice} interface.
@@ -117,7 +117,7 @@ public class TipOfTheDay extends JPanel {
     private int currentTip = 0;
 
     /**
-     * Constructs a new <code>JXTipOfTheDay</code> with an empty
+     * Constructs a new <code>TipOfTheDay</code> with an empty
      * TipOfTheDayModel
      */
     public TipOfTheDay() {
@@ -126,7 +126,7 @@ public class TipOfTheDay extends JPanel {
 
 
     /**
-     * Constructs a new <code>JXTipOfTheDay</code> showing tips from the given
+     * Constructs a new <code>TipOfTheDay</code> showing tips from the given
      * TipOfTheDayModel.
      *
      * @param model model of the UI.
@@ -136,7 +136,7 @@ public class TipOfTheDay extends JPanel {
     }
 
     /**
-     * Constructs a new <code>JXTipOfTheDay</code> showing tips from the given
+     * Constructs a new <code>TipOfTheDay</code> showing tips from the given
      * TipOfTheDayModel.
      *
      * @param model model of the UI.
