@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.2]
+
+- Reduce log messages verbosity.
+- Bump SwingBox@1.2.3
+
 ## [v0.3.1]
 
 - fix: Null check in saveChoice action to avoid potential NPE
@@ -36,7 +41,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...HEAD
+[v0.3.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...v0.3.0
 [v0.2.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.0...v0.2.2

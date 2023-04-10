@@ -71,7 +71,7 @@ allprojects {
         mavenCentral()
     }
     dependencies {
-        implementation("tokyo.northside:swingbox:1.2.2")
+        implementation("tokyo.northside:swingbox:1.2.3")
     }
 }
 
