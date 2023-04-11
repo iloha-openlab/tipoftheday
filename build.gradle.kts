@@ -6,6 +6,7 @@ plugins {
     application
     `java-library`
     `maven-publish`
+    distribution
     checkstyle
     jacoco
     signing
@@ -96,17 +97,19 @@ tasks.jacocoTestReport {
     }
 }
 
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:deprecation")
-    options.compilerArgs.add("-Xlint:unchecked")
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+allprojects {
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.add("-Xlint:deprecation")
+        options.compilerArgs.add("-Xlint:unchecked")
     }
-    withSourcesJar()
-    withJavadocJar()
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+        withSourcesJar()
+        withJavadocJar()
+    }
 }
 
 publishing {
@@ -210,6 +213,7 @@ tasks.sphinx {
 
 project(":demo") {
     apply(plugin = "application")
+    apply(plugin = "distribution")
     application.applicationName = "demo"
     application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
     dependencies {
