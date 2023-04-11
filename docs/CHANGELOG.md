@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.3]
+
+- HtmlTipData: Fix NPE when loading html from jar resource. 
+- demo: allow produce distZip
+
 ## [v0.3.2]
 
 - Reduce log messages verbosity.
@@ -41,7 +46,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...HEAD
+[v0.3.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.2.2...v0.3.0
