@@ -207,8 +207,9 @@ public class TipOfTheDayDemo extends JPanel {
     }
 
     public static URI getTipsFileURI(String filename, Locale locale) {
+        String path;
         // find in install_dir
-        String path = locale == null ? filename : locale.toLanguageTag() + File.separator + filename;
+        path = locale == null ? filename : locale.toLanguageTag() + File.separator + filename;
         File file = Paths.get(installDir(),"docs", "tips", path).toFile();
         if (file.isFile()) {
             return file.toURI();
@@ -230,7 +231,7 @@ public class TipOfTheDayDemo extends JPanel {
     private static String installDir = null;
 
     /**
-     * Returns OmegaT installation directory.
+     * Returns demo app installation directory.
      */
     public static String installDir() {
         if (installDir == null) {

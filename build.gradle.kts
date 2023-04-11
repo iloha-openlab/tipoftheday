@@ -216,4 +216,13 @@ project(":demo") {
         implementation(project.rootProject)
         runtimeOnly("org.slf4j:slf4j-simple:1.7.25")
     }
+    sourceSets {
+        java {
+            main {
+                resources {
+                    setSrcDirs(listOf("docs", "src/main/resources"))
+                }
+            }
+        }
+    }
 }
