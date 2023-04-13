@@ -56,7 +56,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ActionMapUIResource;
-import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 
 import org.fit.cssbox.swingbox.BrowserPane;
@@ -71,12 +70,7 @@ import tokyo.northside.swing.tips.Tip;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-@SuppressWarnings("unused")
-public class BasicTipOfTheDayUI extends TipOfTheDayUI {
-
-    public static ComponentUI createUI(JComponent c) {
-        return new BasicTipOfTheDayUI((TipOfTheDay) c);
-    }
+public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     protected TipOfTheDay tipPane;
     protected JPanel tipArea;
