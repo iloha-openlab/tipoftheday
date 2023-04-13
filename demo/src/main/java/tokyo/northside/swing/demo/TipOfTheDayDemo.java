@@ -29,9 +29,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
@@ -39,11 +41,13 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import tokyo.northside.swing.TipOfTheDay;
 import tokyo.northside.swing.data.HtmlTipData;
@@ -93,6 +97,7 @@ public class TipOfTheDayDemo extends JPanel {
     }
 
     private void createTipOfTheDayDemo() {
+        ResourceBundle rb = ResourceBundle.getBundle("tokyo.northside.swing.demo.TipOfTheDayDemo");
         model = createTipOfTheDayModel();
         JPanel panel = new JPanel();
         TipOfTheDay totd1 = new TipOfTheDay(model);
@@ -146,9 +151,22 @@ public class TipOfTheDayDemo extends JPanel {
         };
 
         dialogButton.addActionListener(actionEvent -> {
+            for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements();) {
+                String key = keys.nextElement();
+                UIManager.getDefaults().put(key, rb.getObject(key));
+            }
             TipOfTheDay totd = new TipOfTheDay(model);
             totd.setCurrentTip(0);
-            totd.showDialog(TipOfTheDayDemo.this, choice, true);
+            /* {@link TipOfTheDay#showDilog} when default is ok, otherwise
+               you need to use {@link TipOfTheDay#createDialog}
+             */
+            // When using default dialog:
+            //   totd.showDialog(TipOfTheDayDemo.this, choice, true);
+            JDialog dialog = totd.getUI().createDialog(TipOfTheDayDemo.this, choice);
+            dialog.setPreferredSize(new Dimension(600, 350));
+            dialog.pack();
+            dialog.setVisible(true);
+            dialog.dispose();
         });
 
         closeButton.addActionListener(actionEvent -> {

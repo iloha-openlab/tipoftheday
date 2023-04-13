@@ -194,8 +194,6 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
         installKeyboardActions();
         installComponents();
         installListeners();
-
-        showCurrentTip();
     }
 
     protected void installKeyboardActions() {

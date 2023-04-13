@@ -31,6 +31,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.FontUIResource;
 import tokyo.northside.swing.TipOfTheDay;
 
@@ -40,6 +41,11 @@ import tokyo.northside.swing.TipOfTheDay;
  * @author Hiroshi Miura
  */
 public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
+
+    public static ComponentUI createUI(JComponent c) {
+        return new DefaultTipOfTheDayUI((TipOfTheDay) c);
+    }
+
 
     public DefaultTipOfTheDayUI(TipOfTheDay tipPane) {
         super(tipPane);
