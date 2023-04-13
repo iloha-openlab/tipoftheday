@@ -100,7 +100,6 @@ public class BasicTipOfTheDayUI extends TipOfTheDayUI {
     protected JDialog createDialog(
             Component parentComponent, final ShowOnStartupChoice choice, boolean showPreviousButton) {
         Locale locale = parentComponent == null ? null : parentComponent.getLocale();
-        // XXX
         String title = UIManager.getString("TipOfTheDay.dialogTitle", locale);
 
         final JDialog dialog;

@@ -89,7 +89,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         }
         font = font.deriveFont(Font.BOLD, 13f);
 
-        defaults.put(TipOfTheDay.uiClassID, DefaultTipOfTheDayUI.class.getName());
         Font tipOfTheDayFont = UIManager.getFont("TextPane.font");
         if (tipOfTheDayFont == null) {
             tipOfTheDayFont = new Font("Serif", Font.PLAIN, 12);

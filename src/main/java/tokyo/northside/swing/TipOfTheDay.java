@@ -157,7 +157,7 @@ public class TipOfTheDay extends JPanel {
      */
     @Override
     public void updateUI() {
-        if (UIManager.get(getUIClassID()) != null) {
+        if (UIManager.get(uiClassID) != null) {
             setUI((TipOfTheDayUI) UIManager.getUI(this));
         } else {
             setUI(new DefaultTipOfTheDayUI(this));
