@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.0]
+
+- Change BasicTipOfTheDayUI class to be abstract
+  - remove BasicTipOfTheDayUI.createUI static method
+- Refactor BasicTipOfTheDayUI, DefaultTipOfTheDayUI class
+
 ## [v0.3.3]
 
 - HtmlTipData: Fix NPE when loading html from jar resource. 
@@ -46,7 +52,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...HEAD
+[v0.4.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...v0.4.0
 [v0.3.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.0...v0.3.1
