@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.1]
+
 - Bump SwingBox@1.2.4
 - Update a document
 - refactor demo application to show how to customize UI.
@@ -56,7 +58,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...HEAD
+[v0.4.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...v0.4.0
 [v0.3.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.1...v0.3.2
