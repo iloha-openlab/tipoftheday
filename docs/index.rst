@@ -20,7 +20,6 @@ Contents
    :maxdepth: 1
 
    HowToUse
-   Customize
    SECURITY
    CONTRIBUTE
    CODE_OF_CONDUCT
