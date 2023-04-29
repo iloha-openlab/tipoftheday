@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Bump SwingBox@1.2.4
+- Update a document
+- refactor demo application to show how to customize UI.
+
 ## [v0.4.0]
 
 - Change BasicTipOfTheDayUI class to be abstract
