@@ -21,6 +21,8 @@ package tokyo.northside.swing.demo;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +35,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -41,6 +44,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -53,6 +57,7 @@ import tokyo.northside.swing.TipOfTheDay;
 import tokyo.northside.swing.data.HtmlTipData;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
+import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
 /**
@@ -63,13 +68,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * @author Hiroshi Miura
  */
 public class TipOfTheDayDemo extends JPanel {
-    private TipOfTheDayModel model;
     private static final JFrame frame = new JFrame();
-    private final Preferences prefs;
-    private static final String PREFS_KEY = "tipsoftheday_demo_show_on_startup";
-    private static final String PREFS_NOT_SET = "prefs_not_set";
-    private static final String PREFS_YES = "true";
-    private static final String PREFS_NO = "false";
 
     /**
      * The main method allows us to run as a standalone demo.
@@ -92,13 +91,12 @@ public class TipOfTheDayDemo extends JPanel {
 
     public TipOfTheDayDemo() {
         super(new BorderLayout());
-        prefs = Preferences.userNodeForPackage(this.getClass());
         createTipOfTheDayDemo();
     }
 
     private void createTipOfTheDayDemo() {
-        ResourceBundle rb = ResourceBundle.getBundle("tokyo.northside.swing.demo.TipOfTheDayDemo");
-        model = createTipOfTheDayModel();
+        TipOfTheDayModel model = createTipOfTheDayModel();
+        // Create a component of TipOfTheDay.
         JPanel panel = new JPanel();
         TipOfTheDay totd1 = new TipOfTheDay(model);
         // When you want to customize UI design, you can make your
@@ -130,50 +128,85 @@ public class TipOfTheDayDemo extends JPanel {
         previousTipButton.addActionListener(e -> totd1.previousTip());
         nextTipButton.addActionListener(e -> totd1.nextTip());
 
-        TipOfTheDay.ShowOnStartupChoice choice = new TipOfTheDay.ShowOnStartupChoice() {
-            @Override
-            public void setShowingOnStartup(boolean showOnStartup) {
-                // Save to storage.
-                // Demo uses Java Preferences feature.
-                if (showOnStartup) {
-                    prefs.put(PREFS_KEY, PREFS_YES);
-                } else {
-                    prefs.put(PREFS_KEY, PREFS_NO);
-                }
-            }
-
-            @Override
-            public boolean isShowingOnStartup() {
-                // true when preference is to show "Tip of the Day" dialog on start-up.
-                String config = prefs.get(PREFS_KEY, PREFS_NOT_SET);
-                return config.equals(PREFS_NOT_SET) || config.equalsIgnoreCase("true");
-            }
-        };
-
-        dialogButton.addActionListener(actionEvent -> {
-            for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements();) {
-                String key = keys.nextElement();
-                UIManager.getDefaults().put(key, rb.getObject(key));
-            }
-            TipOfTheDay totd = new TipOfTheDay(model);
-            totd.setCurrentTip(0);
-            /* {@link TipOfTheDay#showDilog} when default is ok, otherwise
-               you need to use {@link TipOfTheDay#createDialog}
-             */
-            // When using default dialog:
-            //   totd.showDialog(TipOfTheDayDemo.this, choice, true);
-            JDialog dialog = totd.getUI().createDialog(TipOfTheDayDemo.this, choice);
-            dialog.setPreferredSize(new Dimension(600, 350));
-            dialog.pack();
-            dialog.setVisible(true);
-            dialog.dispose();
-        });
+        // demonstrate how to create a custom Dialog of Tip of the Day.
+        dialogButton.addActionListener(new ShowDialogActionListener(this, model, new ShowOnStartupChoiceImpl()));
 
         closeButton.addActionListener(actionEvent -> {
             if (frame.isDisplayable()) {
                 frame.dispose();
             }
         });
+    }
+
+    private static final String PREFS_KEY = "tipsoftheday_demo_show_on_startup";
+    private static final String PREFS_NOT_SET = "prefs_not_set";
+    private static final String PREFS_YES = "true";
+    private static final String PREFS_NO = "false";
+
+    static class ShowOnStartupChoiceImpl implements TipOfTheDay.ShowOnStartupChoice {
+        private final Preferences prefs;
+
+        public ShowOnStartupChoiceImpl() {
+            prefs = Preferences.userNodeForPackage(TipOfTheDayDemo.class);
+        }
+
+        @Override
+        public void setShowingOnStartup(boolean showOnStartup) {
+            // Save to storage.
+            // Demo uses Java Preferences feature.
+            if (showOnStartup) {
+                prefs.put(PREFS_KEY, PREFS_YES);
+            } else {
+                prefs.put(PREFS_KEY, PREFS_NO);
+            }
+        }
+
+        @Override
+        public boolean isShowingOnStartup() {
+            // true when preference is to show "Tip of the Day" dialog on start-up.
+            String config = prefs.get(PREFS_KEY, PREFS_NOT_SET);
+            return config.equals(PREFS_NOT_SET) || config.equalsIgnoreCase("true");
+        }
+    }
+
+    /**
+     * ActionListener for showDialog button.
+     * <p>
+     * Use {@link tokyo.northside.swing.TipOfTheDay#showDialog}
+     * when default UI is ok for you, otherwise please use
+     * {@link tokyo.northside.swing.plaf.TipOfTheDayUI#createDialog}
+     * This demo example explains how to customize dialog size.
+     */
+    static class ShowDialogActionListener implements ActionListener {
+        private final JComponent parent;
+        private final TipOfTheDayModel model;
+        private final TipOfTheDay.ShowOnStartupChoice choice;
+        private final ResourceBundle rb = ResourceBundle.getBundle("tokyo.northside.swing.demo.TipOfTheDayDemo");
+
+        public ShowDialogActionListener(JComponent parent, TipOfTheDayModel model, TipOfTheDay.ShowOnStartupChoice choice) {
+            this.parent = parent;
+            this.model = model;
+            this.choice = choice;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements(); ) {
+                String key = keys.nextElement();
+                UIManager.getDefaults().put(key, rb.getObject(key));
+            }
+            TipOfTheDay totd = new TipOfTheDay(model);
+            totd.setCurrentTip(0);
+            // When using default dialog:
+            //   boolean result = totd.showDialog(parent, choice, true);
+            // Here we use a primitive method to customize dialog size.
+            JDialog dialog = totd.getUI().createDialog(parent, choice);
+            dialog.setPreferredSize(new Dimension(600, 350));
+            dialog.pack();
+            dialog.setVisible(true);
+            dialog.dispose();
+            boolean result = choice.isShowingOnStartup();
+        }
     }
 
     protected TipOfTheDayModel createTipOfTheDayModel() {
@@ -204,6 +237,21 @@ public class TipOfTheDayDemo extends JPanel {
                 tips.add(new DefaultTip("Simple HTML", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
             }
         } catch (IOException ignored) {
+        }
+
+        // Use TipLoader utility
+        Properties props = new Properties();
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/SimpleTips.properties")) {
+            props.load(is);
+        } catch (IOException ignored) {
+        }
+        TipOfTheDayModel propTips = TipLoader.load(props);
+        // you can use propTips as your model for TipOfTheDay constructor.
+        // ex. new TipOfTheDay(propTips);
+        // Here we retrieve tip objects from the model and merge it into the default model.
+        int numPropTips = propTips.getTipCount();
+        for (int i = 0; i < numPropTips; i++) {
+            tips.add(propTips.getTipAt(i));
         }
 
         // HTML file
