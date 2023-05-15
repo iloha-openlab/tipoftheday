@@ -1,13 +1,19 @@
-# woodpecker-CI
+
+branches: [main]
+
 pipeline:
   fetch:
-    image: debian
-    commands:
-      - git fetch --tags
+    image: drone/git
+    settings:
+      depth: 1
+      tags: true
   build:
-    image: gradle/7.6-jdk11
-    commands:
-      - gradle clean printVersion build
+    image: ubuntu:latest
+    pull: true
+    commands: |
+      apt-get update && apt-get install -y openjdk-17-jdk libicu-dev libcurl4-openssl-dev libjansson-dev
+      ./gradlew clean printVersion build
+
     ## when library project to publish to OSSRH
     # release:
     #  - image: gradle/7.6-jdk11
