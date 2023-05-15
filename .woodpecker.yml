@@ -1,0 +1,21 @@
+# woodpecker-CI
+pipeline:
+  fetch:
+    image: docker/git
+    commands:
+      - git fetch --tags
+  build:
+    image: gradle/7.6-jdk11
+    commands:
+      - gradle clean printVersion build
+    ## when library project to publish to OSSRH
+    # release:
+    #  - image: gradle/7.6-jdk11
+    #    name: Publish package to OSSRH
+    #    commands:
+    #      - gradle publishToSonatype
+    #    secrets:
+      #    - ORG_GRADLE_PROJECT_signingKey: gpg_secret_key
+      #      ORG_GRADLE_PROJECT_signingPassword: gpg_key_passpharase
+      #      SONATYPE_USER: sonatype_user
+      #      SONATYPE_PASS: sonatype_pass
