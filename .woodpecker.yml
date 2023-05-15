@@ -2,11 +2,6 @@
 branches: [main]
 
 pipeline:
-  fetch:
-    image: drone/git
-    settings:
-      depth: 1
-      tags: true
   build:
     image: ubuntu:latest
     pull: true
