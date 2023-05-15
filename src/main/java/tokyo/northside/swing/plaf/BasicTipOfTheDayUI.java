@@ -57,7 +57,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.basic.BasicHTML;
-
 import org.fit.cssbox.swingbox.BrowserPane;
 import tokyo.northside.swing.TipOfTheDay;
 import tokyo.northside.swing.TipOfTheDay.ShowOnStartupChoice;
@@ -258,7 +257,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
             } else if (tipObject instanceof Icon) {
                 currentTipComponent = new JLabel((Icon) tipObject);
             } else if (tipObject instanceof HtmlTipData) {
-                HtmlTipData data = (HtmlTipData)tipObject;
+                HtmlTipData data = (HtmlTipData) tipObject;
                 try {
                     URL url = data.getDocumentUri().toURL();
                     JScrollPane tipScroll = new JScrollPane();

@@ -42,10 +42,10 @@ import tokyo.northside.swing.TipOfTheDay;
  */
 public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
 
+    @SuppressWarnings("unused")
     public static ComponentUI createUI(JComponent c) {
         return new DefaultTipOfTheDayUI((TipOfTheDay) c);
     }
-
 
     public DefaultTipOfTheDayUI(TipOfTheDay tipPane) {
         super(tipPane);
@@ -102,8 +102,7 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         defaults.put("TipOfTheDay.font", tipOfTheDayFont);
         defaults.put("TipOfTheDay.tipFont", new FontUIResource(font));
         defaults.put("TipOfTheDay.background", new ColorUIResource(Color.WHITE));
-        defaults.put(
-                "TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "TipOfTheDay24.gif"));
+        defaults.put("TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "TipOfTheDay24.gif"));
         defaults.put(
                 "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
         defaults.addResourceBundle("tokyo.northside.swing.plaf.DefaultTipOfTheDayUI");

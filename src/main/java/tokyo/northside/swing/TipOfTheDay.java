@@ -124,7 +124,6 @@ public class TipOfTheDay extends JPanel {
         this(new DefaultTipOfTheDayModel(new Tip[0]));
     }
 
-
     /**
      * Constructs a new <code>TipOfTheDay</code> showing tips from the given
      * TipOfTheDayModel.

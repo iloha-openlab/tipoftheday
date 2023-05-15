@@ -57,7 +57,7 @@ public class DefaultTip implements Tip {
     }
 
     public static Tip of(String name, Object value) {
-      return new DefaultTip(name, value);
+        return new DefaultTip(name, value);
     }
 
     @Override
