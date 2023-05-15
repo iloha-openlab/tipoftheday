@@ -16,5 +16,5 @@ pipeline:
     #    secrets:
       #    - ORG_GRADLE_PROJECT_signingKey: gpg_secret_key
       #      ORG_GRADLE_PROJECT_signingPassword: gpg_key_passpharase
-      #      SONATYPE_USER: sonatype_user
-      #      SONATYPE_PASS: sonatype_pass
+      #      ORG_GRADLE_PROJECT_sonatypeUsername: sonatype_user
+      #      ORG_GRADLE_PROJECT_sonatypePassword: sonatype_pass

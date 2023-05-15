@@ -167,12 +167,10 @@ signing {
 
 nexusPublishing {
     repositories{
-        sonatype {
-            username.set(project.property("sonatypeUsername")?.toString()?: System.getenv("SONATYPE_USER"))
-            password.set(project.property("sonatypePassword")?.toString()?: System.getenv("SONATYPE_PASS"))
-        }
+        sonatype()
     }
 }
+
 spotless {
     format("misc") {
         target(listOf("*.gradle", ".gitignore", "*.rst"))
