@@ -22,7 +22,6 @@ Its interpretation depends on its type:
   - The object is converted to a `String` by calling its `toString` method.
   - The result is wrapped in a `JEditorPane` or `JTextArea` and displayed.
 
-
 ![TipOfTheDayCapture.png](docs%2FTipOfTheDayCapture.png)
 
 HTML with CSS.
