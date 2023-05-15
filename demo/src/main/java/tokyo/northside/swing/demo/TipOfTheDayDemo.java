@@ -22,7 +22,6 @@ package tokyo.northside.swing.demo;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,16 +39,16 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -61,7 +60,7 @@ import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
 /**
- * A demo for the {@code JXTipOfTheDay}.
+ * A demo for the {@code TipOfTheDay}.
  *
  * @author Karl George Schaefer
  * @author l2fprod (original JXTipOfTheDayDemoPanel)
@@ -70,6 +69,18 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
 public class TipOfTheDayDemo extends JPanel {
     private static final JFrame frame = new JFrame();
 
+    // model of "tip of the day" component.
+    private TipOfTheDayModel model;
+    // controller of "tip of the day" component.
+    private TipOfTheDay totd1;
+
+
+    // gui parts for embed demo.
+    private JButton previousTipButton;
+    private JButton nextTipButton;
+    private JButton dialogButton;
+    JButton closeButton;
+
     /**
      * The main method allows us to run as a standalone demo.
      */
@@ -77,11 +88,9 @@ public class TipOfTheDayDemo extends JPanel {
         SwingUtilities.invokeLater(() -> {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setTitle("\"Tip of the Day\" Demo Application");
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-            panel.add(new JLabel("Following is embed version of Tip of the Day."));
-            panel.add(new TipOfTheDayDemo());
-            frame.getContentPane().add(panel);
+            TipOfTheDayDemo demoPanel = new TipOfTheDayDemo();
+            frame.getContentPane().add(demoPanel);
+            frame.getRootPane().setDefaultButton(demoPanel.closeButton);
             frame.setPreferredSize(new Dimension(950, 500));
             frame.pack();
             frame.setLocationRelativeTo(null);
@@ -95,10 +104,10 @@ public class TipOfTheDayDemo extends JPanel {
     }
 
     private void createTipOfTheDayDemo() {
-        TipOfTheDayModel model = createTipOfTheDayModel();
+        model = createTipOfTheDayModel();
         // Create a component of TipOfTheDay.
         JPanel panel = new JPanel();
-        TipOfTheDay totd1 = new TipOfTheDay(model);
+        totd1 = new TipOfTheDay(model);
         // When you want to customize UI design, you can make your
         // custom class inherit from BasicTipOfTheDayUI, and set it
         // using setUI method.
@@ -110,30 +119,55 @@ public class TipOfTheDayDemo extends JPanel {
         add(panel);
 
         JPanel buttonPanel = new JPanel();
-        JButton previousTipButton = new JButton();
-        previousTipButton.setText("Previous tip<<");
+        previousTipButton = new JButton();
+        previousTipButton.setText("Previous tip(F1)<<");
         buttonPanel.add(previousTipButton);
-        JButton nextTipButton = new JButton();
-        nextTipButton.setText(">>Next tip");
+        nextTipButton = new JButton();
+        nextTipButton.setText(">>Next tip(F2)");
         buttonPanel.add(nextTipButton);
 
-        JButton dialogButton = new JButton();
-        dialogButton.setText("show tip of the day as dialog");
+        dialogButton = new JButton();
+        dialogButton.setText("show tip of the day as dialog(D)");
         buttonPanel.add(dialogButton);
-        JButton closeButton = new JButton();
-        closeButton.setText("Close");
+        closeButton = new JButton();
+        closeButton.setText("Close(ctrl Q)");
         buttonPanel.add(closeButton);
         add(buttonPanel, BorderLayout.SOUTH);
+        setupActions();
+        // set keymap for actions of TipOfTheDay
+        totd1.getInputMap().put(KeyStroke.getKeyStroke("F1"),"previousTip");
+        totd1.getInputMap().put(KeyStroke.getKeyStroke("F2"), "nextTip");
+        // set keymap for our actions.
+        getInputMap().put(KeyStroke.getKeyStroke("D"), "dialog");
+        getInputMap().put(KeyStroke.getKeyStroke("ctrl Q"), "close");
+    }
 
+    /**
+     * set actions for embed demo.
+     */
+    private void setupActions() {
         previousTipButton.addActionListener(e -> totd1.previousTip());
         nextTipButton.addActionListener(e -> totd1.nextTip());
-
-        // demonstrate how to create a custom Dialog of Tip of the Day.
-        dialogButton.addActionListener(new ShowDialogActionListener(this, model, new ShowOnStartupChoiceImpl()));
-
+        dialogButton.addActionListener(e -> showDialog(TipOfTheDayDemo.this, model));
         closeButton.addActionListener(actionEvent -> {
             if (frame.isDisplayable()) {
                 frame.dispose();
+            }
+        });
+
+        // define our actions for key map.
+        getActionMap().put("dialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDialog(TipOfTheDayDemo.this, model);
+            }
+        });
+        getActionMap().put("close", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (frame.isDisplayable()) {
+                    frame.dispose();
+                }
             }
         });
     }
@@ -143,6 +177,10 @@ public class TipOfTheDayDemo extends JPanel {
     private static final String PREFS_YES = "true";
     private static final String PREFS_NO = "false";
 
+    /**
+     * Choice implementation demo.
+     * This use {@link java.util.prefs.Preferences} for persistence of configuration.
+     */
     static class ShowOnStartupChoiceImpl implements TipOfTheDay.ShowOnStartupChoice {
         private final Preferences prefs;
 
@@ -170,45 +208,37 @@ public class TipOfTheDayDemo extends JPanel {
     }
 
     /**
-     * ActionListener for showDialog button.
+     * Show Dialog.
      * <p>
+     * demonstrate how to create a custom Dialog of Tip of the Day.
      * Use {@link tokyo.northside.swing.TipOfTheDay#showDialog}
      * when default UI is ok for you, otherwise please use
      * {@link tokyo.northside.swing.plaf.TipOfTheDayUI#createDialog}
      * This demo example explains how to customize dialog size.
      */
-    static class ShowDialogActionListener implements ActionListener {
-        private final JComponent parent;
-        private final TipOfTheDayModel model;
-        private final TipOfTheDay.ShowOnStartupChoice choice;
-        private final ResourceBundle rb = ResourceBundle.getBundle("tokyo.northside.swing.demo.TipOfTheDayDemo");
-
-        public ShowDialogActionListener(JComponent parent, TipOfTheDayModel model, TipOfTheDay.ShowOnStartupChoice choice) {
-            this.parent = parent;
-            this.model = model;
-            this.choice = choice;
+    protected static void showDialog(JComponent parent, TipOfTheDayModel model) {
+        TipOfTheDay.ShowOnStartupChoice choice = new ShowOnStartupChoiceImpl();
+        final ResourceBundle rb = ResourceBundle.getBundle("tokyo.northside.swing.demo.TipOfTheDayDemo");
+        for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements(); ) {
+            String key = keys.nextElement();
+            UIManager.getDefaults().put(key, rb.getObject(key));
         }
-
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-            for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements(); ) {
-                String key = keys.nextElement();
-                UIManager.getDefaults().put(key, rb.getObject(key));
-            }
-            TipOfTheDay totd = new TipOfTheDay(model);
-            totd.setCurrentTip(0);
-            // When using default dialog:
-            //   boolean result = totd.showDialog(parent, choice, true);
-            // Here we use a primitive method to customize dialog size.
-            JDialog dialog = totd.getUI().createDialog(parent, choice);
-            dialog.setPreferredSize(new Dimension(600, 350));
-            dialog.pack();
-            dialog.setVisible(true);
-            dialog.dispose();
-            boolean result = choice.isShowingOnStartup();
-        }
+        TipOfTheDay totd = new TipOfTheDay(model);
+        totd.setCurrentTip(0);
+        // When using default dialog:
+        //   boolean result = totd.showDialog(parent, choice, true);
+        // Here we use a primitive method to customize dialog size.
+        JDialog dialog = totd.getUI().createDialog(parent, choice);
+        dialog.setPreferredSize(new Dimension(600, 350));
+        dialog.pack();
+        dialog.setVisible(true);
+        dialog.dispose();
     }
 
+    /**
+     * Example of "tip of the day" model.
+     * @return the model object.
+     */
     protected TipOfTheDayModel createTipOfTheDayModel() {
         // Create a tip model with some tips
         DefaultTipOfTheDayModel tips = new DefaultTipOfTheDayModel();
@@ -267,6 +297,8 @@ public class TipOfTheDayDemo extends JPanel {
         }
         return tips;
     }
+
+    // --- utilities --
 
     public static URI getTipsFileURI(String filename) {
         return getTipsFileURI(filename, null);
