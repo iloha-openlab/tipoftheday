@@ -3,18 +3,17 @@ branches: [main]
 
 pipeline:
   build:
-    image: openjdk:17-alpine
+    image: openjdk:11-alpine
     commands: |
       ./gradlew --no-daemon clean printVersion build
 
     ## when library project to publish to OSSRH
     # release:
-    #  - image: gradle/7.6-jdk11
-    #    name: Publish package to OSSRH
-    #    commands:
-    #      - gradle publishToSonatype
-    #    secrets:
-      #    - ORG_GRADLE_PROJECT_signingKey: gpg_secret_key
-      #      ORG_GRADLE_PROJECT_signingPassword: gpg_key_passpharase
-      #      ORG_GRADLE_PROJECT_sonatypeUsername: sonatype_user
-      #      ORG_GRADLE_PROJECT_sonatypePassword: sonatype_pass
+    #  image: openjdk:11-alpine
+    #  commands: |
+    #     ./gradlew publishToSonatype
+    #  secrets:
+    #    - ORG_GRADLE_PROJECT_signingKey: gpg_secret_key
+    #      ORG_GRADLE_PROJECT_signingPassword: gpg_key_passpharase
+    #      ORG_GRADLE_PROJECT_sonatypeUsername: sonatype_user
+    #      ORG_GRADLE_PROJECT_sonatypePassword: sonatype_pass
