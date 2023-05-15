@@ -5,7 +5,7 @@ pipeline:
   build:
     image: openjdk:17-alpine
     commands: |
-      ./gradlew clean printVersion build
+      ./gradlew --no-daemon clean printVersion build
 
     ## when library project to publish to OSSRH
     # release:
