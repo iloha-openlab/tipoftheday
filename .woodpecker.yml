@@ -3,10 +3,8 @@ branches: [main]
 
 pipeline:
   build:
-    image: ubuntu:latest
-    pull: true
+    image: openjdk:17-alpine
     commands: |
-      apt-get update && apt-get install -y openjdk-17-jdk libicu-dev libcurl4-openssl-dev libjansson-dev
       ./gradlew clean printVersion build
 
     ## when library project to publish to OSSRH
