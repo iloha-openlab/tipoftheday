@@ -1,7 +1,7 @@
 # woodpecker-CI
 pipeline:
   fetch:
-    image: docker/git
+    image: debian
     commands:
       - git fetch --tags
   build:
