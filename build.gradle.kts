@@ -173,14 +173,10 @@ nexusPublishing {
 
 spotless {
     format("misc") {
-        target(listOf("*.gradle", ".gitignore", "*.rst"))
+        target(listOf("*.gradle", ".gitignore", "*.md", "*.rst"))
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()
-    }
-    format("styling") {
-        target(listOf("*.md"))
-        prettier()
     }
     java {
         target(listOf("src/*/java/**/*.java"))
