@@ -31,8 +31,7 @@ import java.util.Properties;
  */
 public final class TipLoader {
 
-    private TipLoader() {
-    }
+    private TipLoader() {}
 
     /**
      * Initializes a TipOfTheDayModel from properties. Each tip is defined by two
@@ -58,7 +57,7 @@ public final class TipLoader {
      *           if a name is found without description
      */
     public static TipOfTheDayModel load(Properties props) {
-        List<Tip> tips = new ArrayList<Tip>();
+        List<Tip> tips = new ArrayList<>();
 
         int count = 1;
         while (true) {
@@ -77,7 +76,7 @@ public final class TipLoader {
             }
 
             DefaultTip tip = new DefaultTip(nameValue, descriptionValue);
-            tips.add((Tip) tip);
+            tips.add(tip);
 
             count++;
         }
