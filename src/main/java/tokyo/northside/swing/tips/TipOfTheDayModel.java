@@ -19,10 +19,8 @@
  */
 package tokyo.northside.swing.tips;
 
-import tokyo.northside.swing.TipOfTheDay;
-
 /**
- * A model for {@link TipOfTheDay}.<br>
+ * A model for {@link tokyo.northside.swing.TipOfTheDay}.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura

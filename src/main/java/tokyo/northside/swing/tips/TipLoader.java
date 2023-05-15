@@ -29,9 +29,10 @@ import java.util.Properties;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-public class TipLoader {
+public final class TipLoader {
 
-    private TipLoader() {}
+    private TipLoader() {
+    }
 
     /**
      * Initializes a TipOfTheDayModel from properties. Each tip is defined by two

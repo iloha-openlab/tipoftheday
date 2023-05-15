@@ -19,10 +19,8 @@
  */
 package tokyo.northside.swing.tips;
 
-import tokyo.northside.swing.TipOfTheDay;
-
 /**
- * A tip.<br>
+ * A tip.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura
@@ -35,8 +33,8 @@ public interface Tip {
     String getTipName();
 
     /**
-     * The tip object to show. See {@link TipOfTheDay} for supported object
-     * types.
+     * The tip object to show. See {@link tokyo.northside.swing.TipOfTheDay}
+     * for supported object types.
      *
      * @return the tip to display
      */

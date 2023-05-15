@@ -84,11 +84,23 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         UIManager.getDefaults().addResourceBundle("tokyo.northside.swing.plaf.BasicTipOfTheDayUI");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JDialog createDialog(Component parentComponent, final ShowOnStartupChoice choice) {
         return createDialog(parentComponent, choice, true);
     }
 
+    /**
+     * Creates a new JDialog to display a TipOfTheDay panel.
+     *
+     * @param parentComponent parent component for dialog.
+     * @param choice config of the choice.
+     * @param showPreviousButton
+     *            show the previous button when true, otherwise hide button.
+     * @return a new JDialog to display a TipOfTheDay panel
+     */
     @SuppressWarnings("SameParameterValue")
     protected JDialog createDialog(
             Component parentComponent, final ShowOnStartupChoice choice, boolean showPreviousButton) {
@@ -180,6 +192,13 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         return dialog;
     }
 
+    /**
+     * Configures the specified component appropriately for the look and feel.
+     * This method is invoked when the BasicTipOfTheDayUI instance is being
+     * installed as the UI delegate on the specified component.
+     * @param c the component where this UI delegate is being installed
+     *
+     */
     @Override
     public void installUI(JComponent c) {
         super.installUI(c);
@@ -189,6 +208,9 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         installListeners();
     }
 
+    /**
+     * Install keyboard actions defined by getActionMap method.
+     */
     protected void installKeyboardActions() {
         ActionMap map = getActionMap();
         if (map != null) {
