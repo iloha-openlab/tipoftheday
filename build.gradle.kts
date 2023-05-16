@@ -7,7 +7,6 @@ plugins {
     `java-library`
     `maven-publish`
     distribution
-    checkstyle
     jacoco
     signing
     id("com.github.spotbugs") version "5.0.9"
@@ -110,9 +109,12 @@ allprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(11))
         }
-        withSourcesJar()
-        withJavadocJar()
     }
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
