@@ -12,8 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Properties;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
@@ -25,6 +29,7 @@ public class TipOfTheDayTest {
 
     @Test
     public void testBean() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
         PropertyChangeReport report = new PropertyChangeReport();
         TipOfTheDay totd = new TipOfTheDay();
         assertEquals(0, totd.getCurrentTip());

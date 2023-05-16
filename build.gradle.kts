@@ -82,6 +82,7 @@ tasks.getByName<Test>("test") {
     // Test in headless mode with ./gradlew test -Pheadless
     if (project.hasProperty("headless")) {
         systemProperty("java.awt.headless", "true")
+        println("Run on headless mode.")
     }
     testLogging.setShowStandardStreams(true)
     testLogging.setExceptionFormat("full")
