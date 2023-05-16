@@ -7,7 +7,6 @@ plugins {
     `java-library`
     `maven-publish`
     distribution
-    checkstyle
     jacoco
     signing
     id("com.github.spotbugs") version "5.0.9"
@@ -82,7 +81,10 @@ tasks.getByName<Test>("test") {
     // Test in headless mode with ./gradlew test -Pheadless
     if (project.hasProperty("headless")) {
         systemProperty("java.awt.headless", "true")
+        println("Run on headless mode.")
     }
+    testLogging.setShowStandardStreams(true)
+    testLogging.setExceptionFormat("full")
 }
 
 jacoco {
@@ -107,9 +109,12 @@ allprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(11))
         }
-        withSourcesJar()
-        withJavadocJar()
     }
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
@@ -173,14 +178,10 @@ nexusPublishing {
 
 spotless {
     format("misc") {
-        target(listOf("*.gradle", ".gitignore", "*.rst"))
+        target(listOf("*.gradle", ".gitignore", "*.md", "*.rst"))
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()
-    }
-    format("styling") {
-        target(listOf("*.md"))
-        prettier()
     }
     java {
         target(listOf("src/*/java/**/*.java"))

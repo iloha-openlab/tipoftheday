@@ -29,7 +29,7 @@ import java.util.Properties;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-public class TipLoader {
+public final class TipLoader {
 
     private TipLoader() {}
 
@@ -57,7 +57,7 @@ public class TipLoader {
      *           if a name is found without description
      */
     public static TipOfTheDayModel load(Properties props) {
-        List<Tip> tips = new ArrayList<Tip>();
+        List<Tip> tips = new ArrayList<>();
 
         int count = 1;
         while (true) {
@@ -76,7 +76,7 @@ public class TipLoader {
             }
 
             DefaultTip tip = new DefaultTip(nameValue, descriptionValue);
-            tips.add((Tip) tip);
+            tips.add(tip);
 
             count++;
         }

@@ -26,10 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import tokyo.northside.swing.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.swing.plaf.TipOfTheDayUI;
-import tokyo.northside.swing.tips.DefaultTip;
 import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.swing.tips.Tip;
-import tokyo.northside.swing.tips.TipLoader;
 import tokyo.northside.swing.tips.TipOfTheDayModel;
 
 /**
@@ -55,10 +53,12 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  *
  * <p>
  * <code>TipOfTheDay</code> finds its tips in its {@link TipOfTheDayModel}.
- * Such model can be programmatically built using {@link DefaultTipOfTheDayModel}
- * and {@link DefaultTip} but
- * the {@link TipLoader} provides a convenient method to
- * build a model and its tips from a {@link java.util.Properties} object.
+ * Such model can be programmatically built using
+ * {@link DefaultTipOfTheDayModel} and
+ * {@link tokyo.northside.swing.tips.DefaultTip} but
+ * the {@link tokyo.northside.swing.tips.TipLoader} provides
+ * a convenient method to build a model and its tips from a
+ * {@link java.util.Properties} object.
  *
  * <p>
  * Example:
@@ -67,7 +67,8 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * <pre>
  * <code>
  * tip.1.description=This is the first time! Plain text.
- * tip.2.description=&lt;html&gt;This is &lt;b&gt;another tip&lt;/b&gt;, it uses HTML!
+ * tip.2.description=&lt;html&gt;This is &lt;b&gt;another tip&lt;/b&gt;,
+ *       it uses HTML!
  * tip.3.description=A third one
  * </code>
  * </pre>
@@ -79,7 +80,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * Properties tips = new Properties();
  * tips.load(new FileInputStream("tips.properties"));
  *
- * TipOfTheDayModel model = TipLoader.load(tips);
+ * TipOfTheDayModel model = tokyo.northside.swing.tips.TipLoader.load(tips);
  * TipOfTheDay tipOfTheDay = new TipOfTheDay(model);
  *
  * tipOfTheDay.showDialog(someParentComponent);
@@ -92,9 +93,9 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * This user choice can be stored in custom storage through
  * the {@link ShowOnStartupChoice} interface.
  *
- * @see TipLoader
- * @see TipOfTheDayModel
- * @see Tip
+ * @see tokyo.northside.swing.tips.TipLoader
+ * @see tokyo.northside.swing.tips.TipOfTheDayModel
+ * @see tokyo.northside.swing.tips.Tip
  * @see #showDialog(Component, ShowOnStartupChoice)
  *
  * @author Frederic Lavigne
@@ -105,7 +106,7 @@ public class TipOfTheDay extends JPanel {
     /**
      * TipOfTheDay pluggable UI key <i>TipOfTheDayUI</i>
      */
-    public static final String uiClassID = "TipOfTheDayUI";
+    private static final String uiClassID = "TipOfTheDayUI";
 
     /**
      * Used when generating PropertyChangeEvents for the "currentTip" property
@@ -197,10 +198,19 @@ public class TipOfTheDay extends JPanel {
         return uiClassID;
     }
 
+    /**
+     * Returns the model.
+     * @return TipOfTheDayModel object.
+     */
     public TipOfTheDayModel getModel() {
         return model;
     }
 
+    /**
+     * Set model data.
+     * fire PropertyChange event with an old and a new model objects.
+     * @param model TipOfTheDayModel object.
+     */
     public void setModel(TipOfTheDayModel model) {
         if (model == null) {
             throw new IllegalArgumentException("model can not be null");
@@ -210,12 +220,16 @@ public class TipOfTheDay extends JPanel {
         firePropertyChange("model", old, model);
     }
 
+    /**
+     * Returns current showing tip.
+     * @return index number.
+     */
     public int getCurrentTip() {
         return currentTip;
     }
 
     /**
-     * Sets the index of the tip to show
+     * Sets the index of the tip to show.
      *
      * @param currentTip current tip index.
      * @throws IllegalArgumentException if currentTip is not within the bounds [0,
