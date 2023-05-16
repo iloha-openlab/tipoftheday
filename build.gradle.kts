@@ -83,6 +83,8 @@ tasks.getByName<Test>("test") {
     if (project.hasProperty("headless")) {
         systemProperty("java.awt.headless", "true")
     }
+    testLogging.setShowStandardStreams(true)
+    testLogging.setExceptionFormat("full")
 }
 
 jacoco {
