@@ -158,33 +158,32 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         JButton closeButton = new JButton(UIManager.getString("TipOfTheDay.closeText", locale));
         buttons.add(closeButton);
 
-        final ActionListener saveChoice = e -> {
-            ShowOnStartupChoice showOnStartupChoice = (ShowOnStartupChoice) e.getSource();
-            if (showOnStartupChoice != null && showOnStartupBox != null) {
-                showOnStartupChoice.setShowingOnStartup(showOnStartupBox.isSelected());
-            }
-        };
-
         closeButton.addActionListener(e -> {
-            if (choice != null) {
-                saveChoice.actionPerformed(new ActionEvent(choice, 0, null));
+            if (dialog.isDisplayable()) {
+                dialog.setVisible(false);
             }
-            dialog.setVisible(false);
         });
+
         dialog.getRootPane().setDefaultButton(closeButton);
 
         dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (choice != null) {
-                    saveChoice.actionPerformed(new ActionEvent(choice, 0, null));
+                    choice.setShowingOnStartup(showOnStartupBox.isSelected());
                 }
             }
         });
 
+        final ActionListener closeAction = e -> {
+            if (dialog.isDisplayable()) {
+                dialog.setVisible(false);
+            }
+        };
+
         ((JComponent) dialog.getContentPane())
                 .registerKeyboardAction(
-                        saveChoice, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+                        closeAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         dialog.pack();
         dialog.setLocationRelativeTo(parentComponent);
