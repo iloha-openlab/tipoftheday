@@ -111,3 +111,36 @@ DefaultTipOfTheDayUI
 Default UI class for ``TipOfTheDay``.
 When ``UIManager.get(uiClassID)`` returns null,  ``TipOfTheDay`` constructor
 use the ``DefaultTipOfTheDayUI`` as a plaf class.
+
+
+Customize keymaps
+=================
+
+`BasicTipOfTheDayUI` class defines two `ActionMap` to support shortcut keys
+in user applications. These are inherited also in `DefaultTipOfTheDayUI` class.
+
+There is `BasicTipOfTheDayUI#getActionMap` method that is
+
+```
+    ActionMap getActionMap() {
+        ActionMap map = new ActionMapUIResource();
+        map.put("previousTip", new PreviousTipAction());
+        map.put("nextTip", new NextTipAction());
+        return map;
+    }
+```
+
+You can use two action keys, "previousTip" and "nextTip", to set your
+shortcut keys with `InputMap`.
+
+You can see a sample usage in `TipOfTheDayDemo` around line 140, like
+
+```
+        TipOfTheDay totd = new TipOfTheDay(model);
+        totd.getInputMap().put(KeyStroke.getKeyStroke(), "previousTip");
+        totd.getInputMap().put(KeyStroke.getKeyStroke("F2"), "nextTip");
+```
+
+This sample set `F1` for previous and `F2` for next tip selection action
+shortcut keys.
+

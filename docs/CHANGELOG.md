@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Bump Gradle@7.6.1
+- Add .readthedocs.yaml
+- fix(uiclass): escape key action(#6)
+- feat(demo): add actionMap usage demo(#4)
+- CI on woodpecker
+
 ## [v0.4.1]
 
 - Bump SwingBox@1.2.4
