@@ -1,5 +1,5 @@
-
-branches: [main]
+when:
+  branch: [main]
 
 clone:
   git:
@@ -10,11 +10,11 @@ clone:
       lfs: false
       tags: true
 
-pipeline:
+steps:
   build:
     image: adoptopenjdk/openjdk11:alpine
-    commands: |
-      ./gradlew --no-daemon clean printVersion build -Pheadless
+    commands:
+      - ./gradlew --no-daemon clean printVersion build
 
     ## when library project to publish to OSSRH
     # release:
