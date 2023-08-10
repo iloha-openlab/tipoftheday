@@ -13,7 +13,7 @@ plugins {
     id("com.diffplug.spotless") version "6.15.0"
     id("tokyo.northside.sphinx") version "1.0.4"
     id("com.palantir.git-version") version "0.13.0" apply false
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.2.0"
 }
 
 fun getProps(f: File): Properties {
