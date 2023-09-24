@@ -9,11 +9,11 @@ plugins {
     distribution
     jacoco
     signing
-    id("com.github.spotbugs") version "5.0.9"
-    id("com.diffplug.spotless") version "6.15.0"
-    id("tokyo.northside.sphinx") version "1.0.4"
-    id("com.palantir.git-version") version "0.13.0" apply false
-    id("io.github.gradle-nexus.publish-plugin") version "1.2.0"
+    alias(libs.plugins.spotbugs)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.nexus.publish)
+    alias(libs.plugins.sphinx)
+    alias(libs.plugins.git.version) apply false
 }
 
 fun getProps(f: File): Properties {
@@ -60,19 +60,13 @@ tasks.getByName("jar") {
 
 group = "tokyo.northside"
 
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+repositories {
+    mavenCentral()
 }
 
-allprojects {
-    apply(plugin="java-library")
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        implementation("tokyo.northside:swingbox:1.2.4")
-    }
+dependencies {
+    implementation(libs.swingbox)
+    testImplementation(libs.junit.jupiter)
 }
 
 tasks.getByName<Test>("test") {
@@ -98,16 +92,14 @@ tasks.jacocoTestReport {
     }
 }
 
-allprojects {
-    tasks.withType<JavaCompile> {
-        options.compilerArgs.add("-Xlint:deprecation")
-        options.compilerArgs.add("-Xlint:unchecked")
-    }
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:deprecation")
+    options.compilerArgs.add("-Xlint:unchecked")
+}
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(11))
-        }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
@@ -207,24 +199,4 @@ spotbugs {
 
 tasks.sphinx {
     sourceDirectory {"docs"}
-}
-
-project(":demo") {
-    apply(plugin = "application")
-    apply(plugin = "distribution")
-    application.applicationName = "demo"
-    application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
-    dependencies {
-        implementation(project.rootProject)
-        runtimeOnly("org.slf4j:slf4j-simple:1.7.25")
-    }
-    sourceSets {
-        java {
-            main {
-                resources {
-                    setSrcDirs(listOf("docs", "src/main/resources"))
-                }
-            }
-        }
-    }
 }
