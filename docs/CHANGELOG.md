@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- Bump Gradle@7.6.1
+## [v0.4.2]
+- Use Gradle version catalog
+- Bump Gradle@8.3
+- Bump SwingBox@1.2.5
+- Bump SLF4J@2.0.7
+- Bump Nexus-Publish@2.0.0-rc-1
+- Bump spotbugs@5.1.3
+- Bump spotless@6.19.0
 - Add .readthedocs.yaml
 - fix(uiclass): escape key action(#6)
 - feat(demo): add actionMap usage demo(#4)
@@ -64,7 +71,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.2...HEAD
+[v0.4.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...v0.4.2
 [v0.4.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...v0.4.0
 [v0.3.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.2...v0.3.3
