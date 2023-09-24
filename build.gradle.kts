@@ -3,7 +3,6 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    application
     `java-library`
     `maven-publish`
     distribution
