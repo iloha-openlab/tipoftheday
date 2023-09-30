@@ -4,7 +4,7 @@ import java.util.Properties
 
 plugins {
     application
-    `java-library`
+    java
     `maven-publish`
     distribution
     jacoco
@@ -211,13 +211,19 @@ tasks.sphinx {
 
 project(":demo") {
     apply(plugin = "application")
+    apply(plugin = "java")
     apply(plugin = "distribution")
-    application.applicationName = "demo"
-    application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
+
+    application {
+        applicationName = "demo"
+        mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
+    }
+
     dependencies {
         implementation(project.rootProject)
         runtimeOnly("org.slf4j:slf4j-simple:1.7.25")
     }
+
     sourceSets {
         java {
             main {
@@ -226,5 +232,16 @@ project(":demo") {
                 }
             }
         }
+    }
+
+    tasks.register<JavaExec>("runOnJava17") {
+        description = "Launch app on Java 17"
+        javaLauncher.set(javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        })
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set(application.mainClass)
+        jvmArgs(listOf("--add-opens", "java.desktop/sun.awt.X11=ALL-UNNAMED"))
+        group = "application"
     }
 }
