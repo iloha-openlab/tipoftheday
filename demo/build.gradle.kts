@@ -32,3 +32,14 @@ sourceSets {
         }
     }
 }
+
+tasks.register<JavaExec>("runOnJava17") {
+    description = "Launch app on Java 17"
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    })
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set(application.mainClass)
+    jvmArgs(listOf("--add-opens", "java.desktop/sun.awt.X11=ALL-UNNAMED"))
+    group = "application"
+}
