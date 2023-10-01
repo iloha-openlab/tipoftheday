@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-application.applicationName = "demo"
+application.applicationName = "tipoftheday-demo"
 application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
 
 repositories {
@@ -14,8 +14,7 @@ repositories {
 
 dependencies {
     implementation(project.rootProject)
-    implementation(libs.swingbox)
-    runtimeOnly(libs.slf4j.simple)
+    runtimeOnly(libs.slf4j.jdk14)
 }
 
 java {
