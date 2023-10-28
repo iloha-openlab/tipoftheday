@@ -17,26 +17,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
-package tokyo.northside.swing.tips;
-
-/**
- * A tip.
+/**    Provides classes and interfaces for dealing with
+ * <code>tokyo.northside.swing.JXTipOfTheDay.</code>
  *
- * @author Frederic Lavigne
- * @author Hiroshi Miura
+ * <h2>Related Documentation</h2>
  */
-public interface Tip {
-
-    /**
-     * @return very short (optional) text describing the tip
-     */
-    String getTipName();
-
-    /**
-     * The tip object to show. See {@link tokyo.northside.swing.TipOfTheDay}
-     * for supported object types.
-     *
-     * @return the tip to display
-     */
-    Object getTip();
-}
+package tokyo.northside.tipoftheday.tips;

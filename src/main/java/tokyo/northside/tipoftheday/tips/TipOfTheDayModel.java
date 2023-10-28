@@ -17,29 +17,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package tokyo.northside.swing.plaf;
+package tokyo.northside.tipoftheday.tips;
 
-import java.awt.Component;
-import javax.swing.JDialog;
-import javax.swing.plaf.PanelUI;
-import tokyo.northside.swing.TipOfTheDay;
+import tokyo.northside.tipoftheday.TipOfTheDay;
 
 /**
- * Pluggable UI for <code>TipOfTheDay</code>.
+ * A model for {@link TipOfTheDay}.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-public abstract class TipOfTheDayUI extends PanelUI {
+public interface TipOfTheDayModel {
 
     /**
-     * Creates a new JDialog to display a TipOfTheDay panel.
-     * If <code>choice</code> is not null then the window will offer a way
-     * for the end-user to not show the tip of the day dialog.
-     *
-     * @param parentComponent parent component for dialog.
-     * @param choice config of the choice.
-     * @return a new JDialog to display a TipOfTheDay panel
+     * @return the number of tips in this model
      */
-    public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.ShowOnStartupChoice choice);
+    int getTipCount();
+
+    /**
+     * @param index a tip text index to show.
+     * @return the tip at <code>index</code>
+     * @throws IndexOutOfBoundsException
+     *           if the index is out of range (index &lt; 0 || index &gt;=
+     *           getTipCount()).
+     */
+    Tip getTipAt(int index);
 }

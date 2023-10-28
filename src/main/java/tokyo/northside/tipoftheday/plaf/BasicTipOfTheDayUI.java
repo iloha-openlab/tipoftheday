@@ -17,7 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package tokyo.northside.swing.plaf;
+package tokyo.northside.tipoftheday.plaf;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -58,10 +58,9 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.basic.BasicHTML;
 import org.fit.cssbox.swingbox.BrowserPane;
-import tokyo.northside.swing.TipOfTheDay;
-import tokyo.northside.swing.TipOfTheDay.ShowOnStartupChoice;
-import tokyo.northside.swing.data.HtmlTipData;
-import tokyo.northside.swing.tips.Tip;
+import tokyo.northside.tipoftheday.TipOfTheDay;
+import tokyo.northside.tipoftheday.data.HtmlTipData;
+import tokyo.northside.tipoftheday.tips.Tip;
 
 /**
  * Base implementation of the <code>TipOfTheDay</code> UI.
@@ -81,14 +80,14 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     public BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
-        UIManager.getDefaults().addResourceBundle("tokyo.northside.swing.plaf.BasicTipOfTheDayUI");
+        UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.swing.BasicTipOfTheDayUI");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public JDialog createDialog(Component parentComponent, final ShowOnStartupChoice choice) {
+    public JDialog createDialog(Component parentComponent, final TipOfTheDay.ShowOnStartupChoice choice) {
         return createDialog(parentComponent, choice, true);
     }
 
@@ -103,7 +102,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
      */
     @SuppressWarnings("SameParameterValue")
     protected JDialog createDialog(
-            Component parentComponent, final ShowOnStartupChoice choice, boolean showPreviousButton) {
+            Component parentComponent, final TipOfTheDay.ShowOnStartupChoice choice, boolean showPreviousButton) {
         Locale locale = parentComponent == null ? null : parentComponent.getLocale();
         String title = UIManager.getString("TipOfTheDay.dialogTitle", locale);
 

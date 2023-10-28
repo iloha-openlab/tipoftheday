@@ -1,6 +1,6 @@
 <FindBugsFilter>
     <Match>
-        <Package name="~tokyo\.northside\.swing\.plaf"/>
+        <Package name="~tokyo\.northside\.tipoftheday\.plaf"/>
         <Bug pattern="EI_EXPOSE_REP2" />
     </Match>
 </FindBugsFilter>

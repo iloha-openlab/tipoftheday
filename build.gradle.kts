@@ -26,9 +26,8 @@ fun getProps(f: File): Properties {
 }
 
 // we handle cases without .git directory
-val home = System.getProperty("user.home")
-val javaHome = System.getProperty("java.home")
-val props = project.file("src/main/resources/version.properties")
+val propsFolder = file("src/main/resources/tokyo/northside/tipoftheday")
+val props = project.file("src/main/resources/tokyo/northside/tipoftheday/version.properties")
 val dotgit = project.file(".git")
 if (dotgit.exists()) {
     apply(plugin = "com.palantir.git-version")
@@ -45,9 +44,8 @@ if (dotgit.exists()) {
 }
 
 tasks.register("writeVersionFile") {
-    val folder = project.file("src/main/resources")
-    if (!folder.exists()) {
-        folder.mkdirs()
+    if (!propsFolder.exists()) {
+        propsFolder.mkdirs()
     }
     props.delete()
     props.appendText("version=" + project.version)
@@ -66,6 +64,12 @@ repositories {
 dependencies {
     implementation(libs.swingbox)
     testImplementation(libs.junit.jupiter)
+}
+
+tasks.jar {
+    manifest {
+        attributes("Automatic-Module-Name" to "tokyo.northside.tipoftheday")
+    }
 }
 
 tasks.getByName<Test>("test") {
@@ -161,9 +165,7 @@ signing {
 }
 
 nexusPublishing {
-    repositories{
-        sonatype()
-    }
+    repositories.sonatype()
 }
 
 spotless {

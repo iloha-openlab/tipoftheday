@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2004 Sun Microsystems, Inc.
+ * Copyright 2009 Sun Microsystems, Inc.
  *           2023 Hiroshi Miura
  *
  * This library is free software; you can redistribute it and/or
@@ -16,52 +15,30 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
  */
-package tokyo.northside.swing.tips;
+package tokyo.northside.tipoftheday.tips;
+
+import tokyo.northside.tipoftheday.TipOfTheDay;
 
 /**
- * Default {@link Tip} implementation.
+ * A tip.
  *
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-public class DefaultTip implements Tip {
+public interface Tip {
 
-    private String name;
+    /**
+     * @return very short (optional) text describing the tip
+     */
+    String getTipName();
 
-    private Object tip;
-
-    public DefaultTip() {}
-
-    public DefaultTip(String name, Object tip) {
-        this.name = name;
-        this.tip = tip;
-    }
-
-    @Override
-    public Object getTip() {
-        return tip;
-    }
-
-    public void setTip(Object tip) {
-        this.tip = tip;
-    }
-
-    @Override
-    public String getTipName() {
-        return name;
-    }
-
-    public void setTipName(String name) {
-        this.name = name;
-    }
-
-    public static Tip of(String name, Object value) {
-        return new DefaultTip(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return getTipName();
-    }
+    /**
+     * The tip object to show. See {@link TipOfTheDay}
+     * for supported object types.
+     *
+     * @return the tip to display
+     */
+    Object getTip();
 }

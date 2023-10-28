@@ -4,7 +4,7 @@
  *
  */
 
-package tokyo.northside.swing;
+package tokyo.northside.tipoftheday;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;

@@ -17,18 +17,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package tokyo.northside.swing;
+package tokyo.northside.tipoftheday;
 
 import java.awt.Component;
 import java.awt.HeadlessException;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import tokyo.northside.swing.plaf.DefaultTipOfTheDayUI;
-import tokyo.northside.swing.plaf.TipOfTheDayUI;
-import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
-import tokyo.northside.swing.tips.Tip;
-import tokyo.northside.swing.tips.TipOfTheDayModel;
+import tokyo.northside.tipoftheday.plaf.DefaultTipOfTheDayUI;
+import tokyo.northside.tipoftheday.plaf.TipOfTheDayUI;
+import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
+import tokyo.northside.tipoftheday.tips.Tip;
+import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
+import tokyo.northside.tipoftheday.tips.DefaultTip;
+import tokyo.northside.tipoftheday.tips.TipLoader;
 
 /**
  * Provides the "Tip of The Day" pane and dialog.
@@ -55,8 +57,8 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * <code>TipOfTheDay</code> finds its tips in its {@link TipOfTheDayModel}.
  * Such model can be programmatically built using
  * {@link DefaultTipOfTheDayModel} and
- * {@link tokyo.northside.swing.tips.DefaultTip} but
- * the {@link tokyo.northside.swing.tips.TipLoader} provides
+ * {@link DefaultTip} but
+ * the {@link TipLoader} provides
  * a convenient method to build a model and its tips from a
  * {@link java.util.Properties} object.
  *
@@ -80,7 +82,7 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * Properties tips = new Properties();
  * tips.load(new FileInputStream("tips.properties"));
  *
- * TipOfTheDayModel model = tokyo.northside.swing.tips.TipLoader.load(tips);
+ * TipOfTheDayModel model = tokyo.northside.tipoftheday.tips.swing.TipLoader.load(tips);
  * TipOfTheDay tipOfTheDay = new TipOfTheDay(model);
  *
  * tipOfTheDay.showDialog(someParentComponent);
@@ -93,9 +95,9 @@ import tokyo.northside.swing.tips.TipOfTheDayModel;
  * This user choice can be stored in custom storage through
  * the {@link ShowOnStartupChoice} interface.
  *
- * @see tokyo.northside.swing.tips.TipLoader
- * @see tokyo.northside.swing.tips.TipOfTheDayModel
- * @see tokyo.northside.swing.tips.Tip
+ * @see TipLoader
+ * @see TipOfTheDayModel
+ * @see Tip
  * @see #showDialog(Component, ShowOnStartupChoice)
  *
  * @author Frederic Lavigne

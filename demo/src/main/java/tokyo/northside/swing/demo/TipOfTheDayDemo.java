@@ -52,12 +52,13 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import tokyo.northside.swing.TipOfTheDay;
-import tokyo.northside.swing.data.HtmlTipData;
-import tokyo.northside.swing.tips.DefaultTip;
-import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
-import tokyo.northside.swing.tips.TipLoader;
-import tokyo.northside.swing.tips.TipOfTheDayModel;
+import tokyo.northside.tipoftheday.TipOfTheDay;
+import tokyo.northside.tipoftheday.data.HtmlTipData;
+import tokyo.northside.tipoftheday.plaf.TipOfTheDayUI;
+import tokyo.northside.tipoftheday.tips.DefaultTip;
+import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
+import tokyo.northside.tipoftheday.tips.TipLoader;
+import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
 /**
  * A demo for the {@code TipOfTheDay}.
@@ -211,9 +212,9 @@ public class TipOfTheDayDemo extends JPanel {
      * Show Dialog.
      * <p>
      * demonstrate how to create a custom Dialog of Tip of the Day.
-     * Use {@link tokyo.northside.swing.TipOfTheDay#showDialog}
+     * Use {@link TipOfTheDay#showDialog}
      * when default UI is ok for you, otherwise please use
-     * {@link tokyo.northside.swing.plaf.TipOfTheDayUI#createDialog}
+     * {@link TipOfTheDayUI#createDialog}
      * This demo example explains how to customize dialog size.
      */
     protected static void showDialog(JComponent parent, TipOfTheDayModel model) {

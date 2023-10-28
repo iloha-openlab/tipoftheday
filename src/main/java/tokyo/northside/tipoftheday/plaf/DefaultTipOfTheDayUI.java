@@ -17,7 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package tokyo.northside.swing.plaf;
+package tokyo.northside.tipoftheday.plaf;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,7 +33,7 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.FontUIResource;
-import tokyo.northside.swing.TipOfTheDay;
+import tokyo.northside.tipoftheday.TipOfTheDay;
 
 /**
  * Default implementation of the <code>TipOfTheDay</code> UI.
@@ -105,6 +105,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
         defaults.put("TipOfTheDay.icon", LookAndFeel.makeIcon(DefaultTipOfTheDayUI.class, "TipOfTheDay24.gif"));
         defaults.put(
                 "TipOfTheDay.border", new BorderUIResource(BorderFactory.createLineBorder(new Color(117, 117, 117))));
-        defaults.addResourceBundle("tokyo.northside.swing.plaf.DefaultTipOfTheDayUI");
+        defaults.addResourceBundle("tokyo.northside.tipoftheday.plaf.swing.DefaultTipOfTheDayUI");
     }
 }

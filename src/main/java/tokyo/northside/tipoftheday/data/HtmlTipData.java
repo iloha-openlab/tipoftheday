@@ -1,4 +1,4 @@
-package tokyo.northside.swing.data;
+package tokyo.northside.tipoftheday.data;
 
 import java.io.IOException;
 import java.net.URI;

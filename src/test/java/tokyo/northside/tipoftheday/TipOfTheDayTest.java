@@ -4,7 +4,7 @@
  *           2023 Hiroshi Miura
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package tokyo.northside.swing;
+package tokyo.northside.tipoftheday;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,11 +19,11 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import tokyo.northside.swing.tips.DefaultTip;
-import tokyo.northside.swing.tips.DefaultTipOfTheDayModel;
-import tokyo.northside.swing.tips.Tip;
-import tokyo.northside.swing.tips.TipLoader;
-import tokyo.northside.swing.tips.TipOfTheDayModel;
+import tokyo.northside.tipoftheday.tips.DefaultTip;
+import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
+import tokyo.northside.tipoftheday.tips.Tip;
+import tokyo.northside.tipoftheday.tips.TipLoader;
+import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
 public class TipOfTheDayTest {
 
