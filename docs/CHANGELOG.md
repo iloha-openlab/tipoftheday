@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Change the package name to "tokyo.northside.tipoftheday" to avoid conflict and to align JPMS module name.
+- Bump commons-io@2.13.0
+- Bump SwingBox@1.2.6
+
 ## [v0.4.2]
 - Use Gradle version catalog
 - Bump Gradle@8.3
