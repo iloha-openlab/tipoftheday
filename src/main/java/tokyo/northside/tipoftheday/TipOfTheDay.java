@@ -26,11 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import tokyo.northside.tipoftheday.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.tipoftheday.plaf.TipOfTheDayUI;
+import tokyo.northside.tipoftheday.tips.DefaultTip;
 import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.tipoftheday.tips.Tip;
-import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
-import tokyo.northside.tipoftheday.tips.DefaultTip;
 import tokyo.northside.tipoftheday.tips.TipLoader;
+import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
 /**
  * Provides the "Tip of The Day" pane and dialog.
