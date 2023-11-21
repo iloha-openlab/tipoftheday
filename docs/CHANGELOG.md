@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.3]
 - Change the package name to "tokyo.northside.tipoftheday" to avoid conflict and to align JPMS module name.
-- Bump commons-io@2.13.0
-- Bump SwingBox@1.2.6
+- Bump commons-io@2.15.0
+- Bump SwingBox@1.2.7
 
 ## [v0.4.2]
 - Use Gradle version catalog
@@ -75,7 +76,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.2...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.3...HEAD
+[v0.4.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.2...v0.4.3
 [v0.4.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...v0.4.2
 [v0.4.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.3.3...v0.4.0
