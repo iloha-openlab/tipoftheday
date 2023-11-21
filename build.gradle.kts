@@ -15,44 +15,26 @@ plugins {
     alias(libs.plugins.git.version) apply false
 }
 
-fun getProps(f: File): Properties {
-    val props = Properties()
-    try {
-        props.load(FileInputStream(f))
-    } catch (t: Throwable) {
-        println("Can't read $f: $t, assuming empty")
-    }
-    return props
-}
-
-// we handle cases without .git directory
-val propsFolder = file("src/main/resources/tokyo/northside/tipoftheday")
-val props = project.file("src/main/resources/tokyo/northside/tipoftheday/version.properties")
 val dotgit = project.file(".git")
 if (dotgit.exists()) {
-    apply(plugin = "com.palantir.git-version")
+    apply(plugin = libs.plugins.git.version.get().pluginId)
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
     val baseVersion = details.lastTag.substring(1)
-    version = if (details.isCleanTag) {  // release version
-        baseVersion
-    } else {  // snapshot version
-        baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+    version = when {
+        details.isCleanTag -> baseVersion
+        else -> baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
     }
-} else if (props.exists()) { // when version.properties already exist, just use it.
-    version = getProps(props).getProperty("version")
-}
-
-tasks.register("writeVersionFile") {
-    if (!propsFolder.exists()) {
-        propsFolder.mkdirs()
+} else {
+    val gitArchival = project.file(".git-archival.properties")
+    val props = Properties()
+    props.load(FileInputStream(gitArchival))
+    val versionDescribe = props.getProperty("describe")
+    val regex = "^v\\d+\\.\\d+\\.\\d+$".toRegex()
+    version = when {
+        regex.matches(versionDescribe) -> versionDescribe.substring(1)
+        else -> versionDescribe.substring(1) + "-SNAPSHOT"
     }
-    props.delete()
-    props.appendText("version=" + project.version)
-}
-
-tasks.getByName("jar") {
-    dependsOn("writeVersionFile")
 }
 
 group = "tokyo.northside"
@@ -104,9 +86,6 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
-}
-
-java {
     withSourcesJar()
     withJavadocJar()
 }
@@ -144,6 +123,9 @@ publishing {
 }
 
 val signKey = listOf("signingKey", "signing.keyId", "signing.gnupg.keyName").find {project.hasProperty(it)}
+tasks.withType<Sign> {
+    onlyIf { signKey != null && !project.version.toString().endsWith("-SNAPSHOT") }
+}
 signing {
     when (signKey) {
         "signingKey" -> {
@@ -164,8 +146,20 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
+val sonatypeUsername: String? by project
+val sonatypePassword: String? by project
+
+// ---------- publish to sonatype OSSRH
 nexusPublishing {
-    repositories.sonatype()
+    repositories.sonatype {
+        if (sonatypeUsername != null && sonatypePassword != null) {
+            username.set(sonatypeUsername)
+            password.set(sonatypePassword)
+        } else {
+            username.set(System.getenv("SONATYPE_USER"))
+            password.set(System.getenv("SONATYPE_PASS"))
+        }
+    }
 }
 
 spotless {
