@@ -80,7 +80,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     public BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
-        UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.swing.BasicTipOfTheDayUI");
+        UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.BasicTipOfTheDayUI");
     }
 
     /**
