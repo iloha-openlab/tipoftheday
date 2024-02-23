@@ -53,7 +53,6 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
 
     @Override
     public void installUI(JComponent c) {
-        super.installUI(c);
         UIDefaults defaults = UIManager.getDefaults();
         addUIDefaults(defaults);
         installDefaults(defaults);

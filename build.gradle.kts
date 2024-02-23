@@ -1,4 +1,3 @@
-import java.io.File
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -33,20 +32,44 @@ if (dotgit.exists()) {
     val regex = "^v\\d+\\.\\d+\\.\\d+$".toRegex()
     version = when {
         regex.matches(versionDescribe) -> versionDescribe.substring(1)
-        else -> versionDescribe.substring(1) + "-SNAPSHOT"
+                                            else -> versionDescribe.substring(1) + "-SNAPSHOT"
     }
 }
 
 group = "tokyo.northside"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
+
+val integrationTest by sourceSets.creating
+
+configurations[integrationTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
 
 dependencies {
     implementation(libs.swingbox)
     testImplementation(libs.junit.jupiter)
+    "integrationTestImplementation"(project)
+    "integrationTestImplementation"(libs.assertj.swing.junit)
 }
+
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+
+    testClassesDirs = integrationTest.output.classesDirs
+    classpath = configurations[integrationTest.runtimeClasspathConfigurationName] + integrationTest.output
+
+    shouldRunAfter(tasks.test)
+}
+
+/*
+tasks.named("check") {
+    dependsOn(integrationTestTask)
+}
+*/
 
 tasks.jar {
     manifest {

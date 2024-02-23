@@ -9,6 +9,7 @@ application.applicationName = "tipoftheday-demo"
 application.mainClass.set("tokyo.northside.swing.demo.TipOfTheDayDemo")
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

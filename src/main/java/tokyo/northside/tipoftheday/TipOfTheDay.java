@@ -164,6 +164,7 @@ public class TipOfTheDay extends JPanel {
         } else {
             setUI(new DefaultTipOfTheDayUI(this));
         }
+        setName("tip_of_the_day");
     }
 
     /**

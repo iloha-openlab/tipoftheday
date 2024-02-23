@@ -73,6 +73,10 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     protected TipOfTheDay tipPane;
     protected JPanel tipArea;
     protected Component currentTipComponent;
+    protected JScrollPane tipScrollPane;
+    protected JEditorPane tipEditorPane;
+    protected BrowserPane tipBrowserPane;
+    protected JTextArea tipTextArea;
 
     protected Font tipFont;
     protected PropertyChangeListener changeListener;
@@ -80,7 +84,27 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     public BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
+        this.tipFont = tipPane.getFont();
         UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.BasicTipOfTheDayUI");
+        tipScrollPane = new JScrollPane();
+        tipBrowserPane = new BrowserPane();
+        tipEditorPane = new JEditorPane("text/html", null);
+        tipTextArea = new JTextArea();
+        initTextPanes();
+    }
+
+    protected void initTextPanes() {
+        tipScrollPane.setBorder(null);
+        tipScrollPane.setOpaque(false);
+        tipScrollPane.getViewport().setOpaque(false);
+        tipScrollPane.setBorder(null);
+        tipScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        tipBrowserPane.setEditable(false);
+        tipEditorPane.setEditable(false);
+        tipEditorPane.setFont(tipFont);
+        tipTextArea.setEditable(false);
+        tipTextArea.setFont(tipFont);
+        tipTextArea.setLineWrap(true);
     }
 
     /**
@@ -199,7 +223,6 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
      */
     @Override
     public void installUI(JComponent c) {
-        super.installUI(c);
         installDefaults();
         installKeyboardActions();
         installComponents();
@@ -242,7 +265,9 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     protected void installComponents() {
         tipPane.setLayout(new BorderLayout());
+        tipPane.setName("tip_pane");
         tipArea = new JPanel(new BorderLayout(2, 2));
+        tipArea.setName("tip_area");
         tipArea.setOpaque(false);
         tipArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tipPane.add("Center", tipArea);
@@ -274,60 +299,42 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
             Object tipObject = tip.getTip();
             if (tipObject instanceof Component) {
                 currentTipComponent = (Component) tipObject;
+                currentTipComponent.setName(tip.getTipName());
             } else if (tipObject instanceof Icon) {
                 currentTipComponent = new JLabel((Icon) tipObject);
+                currentTipComponent.setName(tip.getTipName());
             } else if (tipObject instanceof HtmlTipData) {
                 HtmlTipData data = (HtmlTipData) tipObject;
                 try {
                     URL url = data.getDocumentUri().toURL();
-                    JScrollPane tipScroll = new JScrollPane();
-                    tipScroll.setBorder(null);
-                    tipScroll.setOpaque(false);
-                    tipScroll.getViewport().setOpaque(false);
-                    tipScroll.setBorder(null);
-                    tipScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                     BrowserPane editor = new BrowserPane();
                     editor.setEditable(false);
                     editor.setPage(url);
-                    editor.setFont(tipPane.getFont());
-                    tipScroll.getViewport().setView(editor);
-                    currentTipComponent = tipScroll;
+                    editor.setFont(tipFont);
+                    editor.setName(tip.getTipName());
+                    tipScrollPane.getViewport().setView(editor);
+                    currentTipComponent = tipScrollPane;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                JScrollPane tipScroll = new JScrollPane();
-                tipScroll.setBorder(null);
-                tipScroll.setOpaque(false);
-                tipScroll.getViewport().setOpaque(false);
-                tipScroll.setBorder(null);
-
                 String text = tipObject == null ? "" : tipObject.toString();
-
+                tipEditorPane.removeAll();
                 if (BasicHTML.isHTMLString(text)) {
-                    JEditorPane editor = new JEditorPane("text/html", text);
-                    editor.setFont(tipPane.getFont());
-                    BasicHTML.updateRenderer(editor, text);
-                    editor.setEditable(false);
-                    editor.setBorder(null);
-                    editor.setMargin(null);
-                    editor.setOpaque(false);
-                    editor.setFont(tipFont);
-                    tipScroll.getViewport().setView(editor);
+                    tipEditorPane.setContentType("text/html");
+                    tipEditorPane.setText(text);
+                    tipEditorPane.setFont(tipFont);
+                    BasicHTML.updateRenderer(tipEditorPane, text);
+                    tipEditorPane.setName(tip.getTipName());
+                    tipScrollPane.getViewport().setView(tipEditorPane);
+                    currentTipComponent = tipScrollPane;
                 } else {
-                    JTextArea area = new JTextArea(text);
-                    area.setFont(tipPane.getFont());
-                    area.setEditable(false);
-                    area.setLineWrap(true);
-                    area.setWrapStyleWord(true);
-                    area.setBorder(null);
-                    area.setMargin(null);
-                    area.setOpaque(false);
-                    area.setFont(tipFont);
-                    tipScroll.getViewport().setView(area);
+                    tipTextArea.setText(text);
+                    tipTextArea.setFont(tipFont);
+                    tipTextArea.setName(tip.getTipName());
+                    tipScrollPane.getViewport().setView(tipTextArea);
+                    currentTipComponent = tipScrollPane;
                 }
-
-                currentTipComponent = tipScroll;
             }
         }
 

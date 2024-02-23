@@ -18,4 +18,5 @@ steps:
   build:
     image: adoptopenjdk/openjdk11:alpine
     commands:
-      - ./gradlew --no-daemon clean check
+      - ./gradlew clean check
+      - ./gradlew integrationTest
