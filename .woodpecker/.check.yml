@@ -1,5 +1,6 @@
 when:
   - event: pull_request
+    repo: miurahr/tipoftheday
   - event: tag
     ref: refs/tags/v*
   - event: push
@@ -19,4 +20,5 @@ steps:
     image: adoptopenjdk/openjdk11:alpine
     commands:
       - ./gradlew clean check
-      - ./gradlew integrationTest
+      - apk add --no-cache xvfb xvfb-run
+      - xvfb-run -a --server-args='-screen 0, 1024x768x24' ./gradlew integrationTest
