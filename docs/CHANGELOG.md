@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.4]
+- Add integration-test: test UI behavior
+- fix: not to create duplicated components to reduce resource
+- feat: give names to tips component
+    - TipOfTheDay objects have names: "tip_pane" and "tip_area"
+    - Each object of tips has a user defined name
+
 ## [v0.4.3]
 - Change the package name to "tokyo.northside.tipoftheday" to avoid conflict and to align JPMS module name.
 - Bump commons-io@2.15.0
@@ -76,7 +83,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.3...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.4...HEAD
+[v0.4.4]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.3...v0.4.4
 [v0.4.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.2...v0.4.3
 [v0.4.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...v0.4.2
 [v0.4.1]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.0...v0.4.1
