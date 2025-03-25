@@ -162,7 +162,7 @@ public class TipOfTheDay extends JPanel {
         if (UIManager.get(uiClassID) != null) {
             setUI((TipOfTheDayUI) UIManager.getUI(this));
         } else {
-            setUI(new DefaultTipOfTheDayUI(this));
+            setUI(DefaultTipOfTheDayUI.createUI(this));
         }
         setName("tip_of_the_day");
     }
