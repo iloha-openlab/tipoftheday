@@ -277,8 +277,8 @@ public class TipOfTheDayDemo extends JPanel {
         } catch (IOException ignored) {
         }
         TipOfTheDayModel propTips = TipLoader.load(props);
-        // you can use propTips as your model for TipOfTheDay constructor.
-        // ex. new TipOfTheDay(propTips);
+        // You can use propTips as your model for TipOfTheDay constructor, such as
+        // new TipOfTheDay(propTips);
         // Here we retrieve tip objects from the model and merge it into the default model.
         int numPropTips = propTips.getTipCount();
         for (int i = 0; i < numPropTips; i++) {
@@ -291,10 +291,7 @@ public class TipOfTheDayDemo extends JPanel {
         tipsUri.put("DAY 2", getTipsFileURI("day2.html"));
         tipsUri.put("DAY 3", getTipsFileURI("day3.html"));
         for (Map.Entry<String, URI> en: tipsUri.entrySet()) {
-            try {
-                tips.add(DefaultTip.of(en.getKey(), HtmlTipData.from(en.getValue())));
-            } catch (IOException ignored) {
-            }
+            tips.add(DefaultTip.of(en.getKey(), HtmlTipData.from(en.getValue())));
         }
         return tips;
     }
