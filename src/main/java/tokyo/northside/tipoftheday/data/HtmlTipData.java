@@ -14,7 +14,7 @@ public class HtmlTipData {
         this.documentUri = documentUri;
     }
 
-    public static HtmlTipData from(URI uri) throws IOException {
+    public static HtmlTipData from(URI uri) {
         return new HtmlTipData(uri);
     }
 
@@ -27,7 +27,7 @@ public class HtmlTipData {
     }
 
     /**
-     * Get document as text.
+     * Get a document as text.
      * @return text.
      * @throws IOException when there is no file at a specified URI.
      */
