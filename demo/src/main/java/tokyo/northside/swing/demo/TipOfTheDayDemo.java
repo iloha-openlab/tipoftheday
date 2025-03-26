@@ -60,6 +60,8 @@ import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.tipoftheday.tips.TipLoader;
 import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 /**
  * A demo for the {@code TipOfTheDay}.
  *
@@ -87,7 +89,7 @@ public class TipOfTheDayDemo extends JPanel {
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
             frame.setTitle("\"Tip of the Day\" Demo Application");
             TipOfTheDayDemo demoPanel = new TipOfTheDayDemo();
             frame.getContentPane().add(demoPanel);
@@ -317,7 +319,6 @@ public class TipOfTheDayDemo extends JPanel {
             try {
                 return url.toURI();
             } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex);
             }
         }
         return null;
