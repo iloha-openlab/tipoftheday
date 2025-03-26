@@ -34,7 +34,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -61,6 +60,7 @@ import org.fit.cssbox.swingbox.BrowserPane;
 import tokyo.northside.tipoftheday.TipOfTheDay;
 import tokyo.northside.tipoftheday.data.HtmlTipData;
 import tokyo.northside.tipoftheday.tips.Tip;
+import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
 /**
  * Base implementation of the <code>TipOfTheDay</code> UI.
@@ -69,6 +69,13 @@ import tokyo.northside.tipoftheday.tips.Tip;
  * @author Hiroshi Miura
  */
 public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
+
+    private static final String PREVIOUS_TIP_ACTION = "previousTip";
+    private static final String NEXT_TIP_ACTION = "nextTip";
+    private static final String CENTER_POSITION = "Center";
+    private static final String SOUTH_POSITION = "South";
+    private static final String TEXT_AREA_BACKGROUND_COLOR_KEY = "TextArea.background";
+    private static final int NO_CURRENT_TIP = -1;
 
     protected TipOfTheDay tipPane;
     protected JPanel tipArea;
@@ -81,7 +88,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     protected Font tipFont;
     protected PropertyChangeListener changeListener;
 
-    public BasicTipOfTheDayUI(TipOfTheDay tipPane) {
+    protected BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
         this.tipFont = tipPane.getFont();
@@ -115,6 +122,15 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         return createDialog(parentComponent, choice, true);
     }
 
+    private Window resolveWindow(Component parentComponent) {
+        if (parentComponent == null) {
+            return JOptionPane.getRootFrame();
+        }
+        return (parentComponent instanceof Window)
+                ? (Window) parentComponent
+                : SwingUtilities.getWindowAncestor(parentComponent);
+    }
+
     /**
      * Creates a new JDialog to display a TipOfTheDay panel.
      *
@@ -130,33 +146,23 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         Locale locale = parentComponent == null ? null : parentComponent.getLocale();
         String title = UIManager.getString("TipOfTheDay.dialogTitle", locale);
 
-        final JDialog dialog;
+        Window parentWindow = resolveWindow(parentComponent);
 
-        Window window;
-        if (parentComponent == null) {
-            window = JOptionPane.getRootFrame();
-        } else {
-            window = (parentComponent instanceof Window)
-                    ? (Window) parentComponent
-                    : SwingUtilities.getWindowAncestor(parentComponent);
-        }
+        boolean isParentFrame = parentWindow instanceof Frame;
+        final JDialog tipDialog = isParentFrame
+                ? new JDialog((Frame) parentWindow, title, true)
+                : new JDialog((Dialog) parentWindow, title, true);
 
-        if (window instanceof Frame) {
-            dialog = new JDialog((Frame) window, title, true);
-        } else {
-            dialog = new JDialog((Dialog) window, title, true);
-        }
 
-        dialog.getContentPane().setLayout(new BorderLayout(10, 10));
-        dialog.getContentPane().add(tipPane, BorderLayout.CENTER);
-        ((JComponent) dialog.getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        final JCheckBox showOnStartupBox;
+        tipDialog.getContentPane().setLayout(new BorderLayout(10, 10));
+        tipDialog.getContentPane().add(tipPane, BorderLayout.CENTER);
+        ((JComponent) tipDialog.getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // tip control
         JPanel controls = new JPanel(new BorderLayout());
-        dialog.add("South", controls);
+        tipDialog.add(SOUTH_POSITION, controls);
 
+        final JCheckBox showOnStartupBox;
         if (choice != null) {
             showOnStartupBox = new JCheckBox(
                     UIManager.getString("TipOfTheDay.showOnStartupText", locale), choice.isShowingOnStartup());
@@ -171,25 +177,25 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         if (showPreviousButton) {
             JButton previousTipButton = new JButton(UIManager.getString("TipOfTheDay.previousTipText", locale));
             buttons.add(previousTipButton);
-            previousTipButton.addActionListener(getActionMap().get("previousTip"));
+            previousTipButton.addActionListener(getActionMap().get(PREVIOUS_TIP_ACTION));
         }
 
         JButton nextTipButton = new JButton(UIManager.getString("TipOfTheDay.nextTipText", locale));
         buttons.add(nextTipButton);
-        nextTipButton.addActionListener(getActionMap().get("nextTip"));
+        nextTipButton.addActionListener(getActionMap().get(NEXT_TIP_ACTION));
 
         JButton closeButton = new JButton(UIManager.getString("TipOfTheDay.closeText", locale));
         buttons.add(closeButton);
 
         closeButton.addActionListener(e -> {
-            if (dialog.isDisplayable()) {
-                dialog.setVisible(false);
+            if (tipDialog.isDisplayable()) {
+                tipDialog.setVisible(false);
             }
         });
 
-        dialog.getRootPane().setDefaultButton(closeButton);
+        tipDialog.getRootPane().setDefaultButton(closeButton);
 
-        dialog.addWindowListener(new WindowAdapter() {
+        tipDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (choice != null) {
@@ -199,19 +205,19 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         });
 
         final ActionListener closeAction = e -> {
-            if (dialog.isDisplayable()) {
-                dialog.setVisible(false);
+            if (tipDialog.isDisplayable()) {
+                tipDialog.setVisible(false);
             }
         };
 
-        ((JComponent) dialog.getContentPane())
+        ((JComponent) tipDialog.getContentPane())
                 .registerKeyboardAction(
                         closeAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-        dialog.pack();
-        dialog.setLocationRelativeTo(parentComponent);
+        tipDialog.pack();
+        tipDialog.setLocationRelativeTo(parentComponent);
 
-        return dialog;
+        return tipDialog;
     }
 
     /**
@@ -241,8 +247,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     ActionMap getActionMap() {
         ActionMap map = new ActionMapUIResource();
-        map.put("previousTip", new PreviousTipAction());
-        map.put("nextTip", new NextTipAction());
+        map.put(PREVIOUS_TIP_ACTION, new PreviousTipAction());
+        map.put(NEXT_TIP_ACTION, new NextTipAction());
         return map;
     }
 
@@ -260,7 +266,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
                 tipPane, "TipOfTheDay.background", "TipOfTheDay.foreground", "TipOfTheDay.font");
         LookAndFeel.installBorder(tipPane, "TipOfTheDay.border");
         LookAndFeel.installProperty(tipPane, "opaque", Boolean.TRUE);
-        tipFont = UIManager.getFont("TipOfTheDay.tipFont");
+        tipFont = tipPane.getFont();
     }
 
     protected void installComponents() {
@@ -270,7 +276,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipArea.setName("tip_area");
         tipArea.setOpaque(false);
         tipArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        tipPane.add("Center", tipArea);
+        tipArea.setFont(tipFont);
+        tipPane.add(CENTER_POSITION, tipArea);
     }
 
     protected void showCurrentTip() {
@@ -279,66 +286,15 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         }
 
         int currentTip = tipPane.getCurrentTip();
-        if (currentTip == -1) {
-            JLabel label = new JLabel();
-            label.setOpaque(true);
-            label.setBackground(UIManager.getColor("TextArea.background"));
-            currentTipComponent = label;
-            tipArea.add("Center", currentTipComponent);
+        if (currentTip == NO_CURRENT_TIP) {
+            currentTipComponent = createEmptyTipLabel();
+            tipArea.add(CENTER_POSITION, currentTipComponent);
             return;
         }
 
-        // tip does not fall in current tip range
-        if (tipPane.getModel() == null
-                || tipPane.getModel().getTipCount() == 0
-                || (currentTip < 0 && currentTip >= tipPane.getModel().getTipCount())) {
-            currentTipComponent = new JLabel();
-        } else {
-            Tip tip = tipPane.getModel().getTipAt(currentTip);
+        updateTipComponent(currentTip, tipPane.getModel());
 
-            Object tipObject = tip.getTip();
-            if (tipObject instanceof Component) {
-                currentTipComponent = (Component) tipObject;
-                currentTipComponent.setName(tip.getTipName());
-            } else if (tipObject instanceof Icon) {
-                currentTipComponent = new JLabel((Icon) tipObject);
-                currentTipComponent.setName(tip.getTipName());
-            } else if (tipObject instanceof HtmlTipData) {
-                HtmlTipData data = (HtmlTipData) tipObject;
-                try {
-                    URL url = data.getDocumentUri().toURL();
-                    BrowserPane editor = new BrowserPane();
-                    editor.setEditable(false);
-                    editor.setPage(url);
-                    editor.setFont(tipFont);
-                    editor.setName(tip.getTipName());
-                    tipScrollPane.getViewport().setView(editor);
-                    currentTipComponent = tipScrollPane;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                String text = tipObject == null ? "" : tipObject.toString();
-                tipEditorPane.removeAll();
-                if (BasicHTML.isHTMLString(text)) {
-                    tipEditorPane.setContentType("text/html");
-                    tipEditorPane.setText(text);
-                    tipEditorPane.setFont(tipFont);
-                    BasicHTML.updateRenderer(tipEditorPane, text);
-                    tipEditorPane.setName(tip.getTipName());
-                    tipScrollPane.getViewport().setView(tipEditorPane);
-                    currentTipComponent = tipScrollPane;
-                } else {
-                    tipTextArea.setText(text);
-                    tipTextArea.setFont(tipFont);
-                    tipTextArea.setName(tip.getTipName());
-                    tipScrollPane.getViewport().setView(tipTextArea);
-                    currentTipComponent = tipScrollPane;
-                }
-            }
-        }
-
-        tipArea.add("Center", currentTipComponent);
+        tipArea.add(CENTER_POSITION, currentTipComponent);
         tipArea.revalidate();
         tipArea.repaint();
     }
@@ -359,6 +315,84 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     protected void uninstallDefaults() {}
 
+    private JLabel createEmptyTipLabel() {
+        JLabel label = new JLabel();
+        label.setOpaque(true);
+        label.setBackground(UIManager.getColor(TEXT_AREA_BACKGROUND_COLOR_KEY));
+        return label;
+    }
+
+    private void updateTipComponent(int currentTip, TipOfTheDayModel model) {
+        if (isInvalidTip(currentTip, model)) {
+            currentTipComponent = new JLabel();
+            return;
+        }
+
+        Tip tip = model.getTipAt(currentTip);
+        Object tipObject = tip.getTip();
+
+        if (tipObject instanceof Component) {
+            setComponentTip((Component) tipObject, tip.getTipName());
+        } else if (tipObject instanceof Icon) {
+            setComponentTip(new JLabel((Icon) tipObject), tip.getTipName());
+        } else if (tipObject instanceof HtmlTipData) {
+            currentTipComponent = createHtmlTip((HtmlTipData) tipObject, tip.getTipName());
+        } else {
+            currentTipComponent = createTextTip(tipObject, tip.getTipName());
+        }
+    }
+
+    private boolean isInvalidTip(int currentTip, TipOfTheDayModel model) {
+        // tip does not fall in current tip range
+        return model == null || model.getTipCount() == 0 || currentTip < 0 || currentTip >= model.getTipCount();
+    }
+
+    private void setComponentTip(Component component, String tipName) {
+        component.setName(tipName);
+        currentTipComponent = component;
+    }
+
+    private JScrollPane createHtmlTip(HtmlTipData htmlTipData, String tipName) {
+        BrowserPane browserPane = new BrowserPane();
+        try {
+            browserPane.setPage(htmlTipData.getDocumentUri().toURL());
+        } catch (IOException ignored) {
+        }
+        browserPane.setEditable(false);
+        browserPane.setFont(tipFont);
+        browserPane.setName(tipName);
+        tipScrollPane.getViewport().setView(browserPane);
+        return tipScrollPane;
+    }
+
+    private JScrollPane createTextTip(Object tipContent, String tipName) {
+        String text = tipContent == null ? "" : tipContent.toString();
+        if (BasicHTML.isHTMLString(text)) {
+            return createHtmlEditorPane(text, tipName);
+        } else {
+            return createPlainTextArea(text, tipName);
+        }
+    }
+
+    private JScrollPane createHtmlEditorPane(String text, String tipName) {
+        tipEditorPane.removeAll();
+        tipEditorPane.setContentType("text/html");
+        tipEditorPane.setText(text);
+        tipEditorPane.setFont(tipFont);
+        BasicHTML.updateRenderer(tipEditorPane, text);
+        tipEditorPane.setName(tipName);
+        tipScrollPane.getViewport().setView(tipEditorPane);
+        return tipScrollPane;
+    }
+
+    private JScrollPane createPlainTextArea(String text, String tipName) {
+        tipTextArea.setText(text);
+        tipTextArea.setFont(tipFont);
+        tipTextArea.setName(tipName);
+        tipScrollPane.getViewport().setView(tipTextArea);
+        return tipScrollPane;
+    }
+
     class ChangeListener implements PropertyChangeListener {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
@@ -370,7 +404,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     class PreviousTipAction extends AbstractAction {
         public PreviousTipAction() {
-            super("previousTip");
+            super(PREVIOUS_TIP_ACTION);
         }
 
         @Override
@@ -386,7 +420,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
     class NextTipAction extends AbstractAction {
         public NextTipAction() {
-            super("nextTip");
+            super(NEXT_TIP_ACTION);
         }
 
         @Override
