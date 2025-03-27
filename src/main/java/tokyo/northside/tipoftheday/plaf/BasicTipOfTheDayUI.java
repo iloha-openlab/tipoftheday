@@ -153,7 +153,6 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
                 ? new JDialog((Frame) parentWindow, title, true)
                 : new JDialog((Dialog) parentWindow, title, true);
 
-
         tipDialog.getContentPane().setLayout(new BorderLayout(10, 10));
         tipDialog.getContentPane().add(tipPane, BorderLayout.CENTER);
         ((JComponent) tipDialog.getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
