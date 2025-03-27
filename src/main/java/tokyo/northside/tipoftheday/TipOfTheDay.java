@@ -145,9 +145,9 @@ public class TipOfTheDay extends JPanel {
      * @param showOnStartup true if show on startup, otherwise false.
      */
     public TipOfTheDay(TipOfTheDayModel model, boolean showOnStartup) {
-        super();
         this.model = model;
         this.showOnStartUp = showOnStartup;
+        updateUI();
     }
 
     /**
@@ -165,6 +165,18 @@ public class TipOfTheDay extends JPanel {
             setUI(DefaultTipOfTheDayUI.createUI(this));
         }
         setName("tip_of_the_day");
+    }
+
+    /**
+     * Sets the L&amp;F object that renders this component.
+     *
+     * @param ui
+     *          the <code>TipOfTheDayUI</code> L&amp;F object
+     * @see javax.swing.UIDefaults#getUI
+     *
+     */
+    public void setUI(TipOfTheDayUI ui) {
+        super.setUI(ui);
     }
 
     /**
