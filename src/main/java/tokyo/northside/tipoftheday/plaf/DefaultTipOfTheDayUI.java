@@ -63,6 +63,7 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
     }
 
     protected void installDefaults(UIDefaults defaults) {
+        super.installDefaults();
         tipPane.setBackground(defaults.getColor("TipOfTheDay.background"));
         tipPane.setForeground(defaults.getColor("TipOfTheDay.foreground"));
         tipPane.setFont(defaults.getFont("TipOfTheDay.font"));
@@ -72,6 +73,7 @@ public class DefaultTipOfTheDayUI extends BasicTipOfTheDayUI {
     }
 
     protected void installComponents(UIDefaults defaults) {
+        super.installComponents();
         tipPane.setLayout(new BorderLayout());
 
         // tip icon

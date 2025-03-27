@@ -91,16 +91,11 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     protected BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
-        this.tipFont = tipPane.getFont();
         UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.BasicTipOfTheDayUI");
         tipScrollPane = new JScrollPane();
         tipBrowserPane = new BrowserPane();
         tipEditorPane = new JEditorPane("text/html", null);
         tipTextArea = new JTextArea();
-        initTextPanes();
-    }
-
-    protected void initTextPanes() {
         tipScrollPane.setBorder(null);
         tipScrollPane.setOpaque(false);
         tipScrollPane.getViewport().setOpaque(false);
@@ -108,9 +103,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         tipBrowserPane.setEditable(false);
         tipEditorPane.setEditable(false);
-        tipEditorPane.setFont(tipFont);
         tipTextArea.setEditable(false);
-        tipTextArea.setFont(tipFont);
         tipTextArea.setLineWrap(true);
     }
 
@@ -269,6 +262,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     }
 
     protected void installComponents() {
+        tipEditorPane.setFont(tipFont);
+        tipTextArea.setFont(tipFont);
         tipPane.setLayout(new BorderLayout());
         tipPane.setName("tip_pane");
         tipArea = new JPanel(new BorderLayout(2, 2));
