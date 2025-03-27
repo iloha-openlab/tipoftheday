@@ -50,8 +50,10 @@ configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configu
 
 dependencies {
     implementation(libs.swingbox)
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.slf4j.jdk14)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     "integrationTestImplementation"(project)
     "integrationTestImplementation"(libs.assertj.swing.junit)
     "integrationTestImplementation"(libs.slf4j.jdk14)

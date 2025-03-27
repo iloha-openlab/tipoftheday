@@ -1,11 +1,11 @@
 [versions]
 slf4j = "2.0.7"
-junit5 = "5.12.1"
+junit = "5.12.1"
 swingbox = "1.2.8"
 sphinx = "1.0.4"
 
 [libraries]
-junit-jupiter = {group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5"}
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 swingbox = {group = "tokyo.northside", name = "swingbox", version.ref = "swingbox"}
 assertj-swing-junit = {group = "tokyo.northside", name = "assertj-swing-junit", version = "4.0.0-beta-2"}
 slf4j-jdk14 =  {group = "org.slf4j", name = "slf4j-jdk14",  version.ref = "slf4j"}
