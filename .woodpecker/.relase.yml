@@ -18,11 +18,15 @@ steps:
   build:
     image: adoptopenjdk/openjdk11:alpine
     commands:
-      - export ORG_GRADLE_PROJECT_signingKey=$GPG_SECRET_KEY
-      - export ORG_GRADLE_PROJECT_signingPassword=$GPG_KEY_PASSPHARASE
+      - export ORG_GRADLE_PROJECT_signingKey=$${GPG_SECRET_KEY}
+      - export ORG_GRADLE_PROJECT_signingPassword=$${GPG_KEY_PASSPHARASE}
       - ./gradlew --no-daemon clean publish
-    secrets:
-      - gpg_secret_key
-      - gpg_key_passphrase
-      - sonatype_user
-      - sonatype_pass
+    environment:
+      GPG_SECRET_KEY:
+        from_secret: gpg_secret_key
+      GPG_SECRET_PASSPHRASE:
+        from_secret: gpg_key_passphrase
+      SONATYPE_USER:
+        from_secret: sonatype_user
+      SONATYPE_PASS:
+        from_secret: sonatype_pass
