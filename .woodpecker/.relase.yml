@@ -18,8 +18,9 @@ steps:
   build:
     image: adoptopenjdk/openjdk11:alpine
     commands:
+      - apk add --no-cache git
       - export ORG_GRADLE_PROJECT_signingKey=$${GPG_SECRET_KEY}
-      - export ORG_GRADLE_PROJECT_signingPassword=$${GPG_KEY_PASSPHARASE}
+      - export ORG_GRADLE_PROJECT_signingPassword=$${GPG_KEY_PASSPHRASE}
       - ./gradlew --no-daemon clean publish
     environment:
       GPG_SECRET_KEY:
