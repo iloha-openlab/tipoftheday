@@ -19,21 +19,27 @@
  */
 package tokyo.northside.tipoftheday.plaf;
 
+import cz.vutbr.web.css.MediaSpec;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -56,7 +62,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.basic.BasicHTML;
-import org.fit.cssbox.swingbox.BrowserPane;
+import org.fit.cssbox.awt.BrowserCanvas;
+import org.fit.cssbox.css.CSSNorm;
+import org.fit.cssbox.css.DOMAnalyzer;
+import org.fit.cssbox.io.DOMSource;
+import org.fit.cssbox.io.DefaultDOMSource;
+import org.fit.cssbox.io.DefaultDocumentSource;
+import org.fit.cssbox.io.DocumentSource;
+import org.fit.cssbox.layout.BrowserConfig;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 import tokyo.northside.tipoftheday.TipOfTheDay;
 import tokyo.northside.tipoftheday.data.HtmlTipData;
 import tokyo.northside.tipoftheday.tips.Tip;
@@ -82,18 +97,18 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     protected Component currentTipComponent;
     protected JScrollPane tipScrollPane;
     protected JEditorPane tipEditorPane;
-    protected BrowserPane tipBrowserPane;
     protected JTextArea tipTextArea;
 
     protected Font tipFont;
     protected PropertyChangeListener changeListener;
+
+    protected BrowserConfig browserConfig;
 
     protected BasicTipOfTheDayUI(TipOfTheDay tipPane) {
         super();
         this.tipPane = tipPane;
         UIManager.getDefaults().addResourceBundle("tokyo.northside.tipoftheday.plaf.BasicTipOfTheDayUI");
         tipScrollPane = new JScrollPane();
-        tipBrowserPane = new BrowserPane();
         tipEditorPane = new JEditorPane("text/html", null);
         tipTextArea = new JTextArea();
         tipScrollPane.setBorder(null);
@@ -101,15 +116,12 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipScrollPane.getViewport().setOpaque(false);
         tipScrollPane.setBorder(null);
         tipScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        tipBrowserPane.setEditable(false);
         tipEditorPane.setEditable(false);
         tipTextArea.setEditable(false);
         tipTextArea.setLineWrap(true);
+        browserConfig = new BrowserConfig();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JDialog createDialog(Component parentComponent, final TipOfTheDay.ShowOnStartupChoice choice) {
         return createDialog(parentComponent, choice, true);
@@ -286,7 +298,11 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
             return;
         }
 
-        updateTipComponent(currentTip, tipPane.getModel());
+        try {
+            updateTipComponent(currentTip, tipPane.getModel());
+        } catch (IOException | SAXException e) {
+            currentTipComponent = createEmptyTipLabel();
+        }
 
         tipArea.add(CENTER_POSITION, currentTipComponent);
         tipArea.revalidate();
@@ -316,7 +332,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         return label;
     }
 
-    private void updateTipComponent(int currentTip, TipOfTheDayModel model) {
+    private void updateTipComponent(int currentTip, TipOfTheDayModel model) throws IOException, SAXException {
         if (isInvalidTip(currentTip, model)) {
             currentTipComponent = new JLabel();
             return;
@@ -346,17 +362,53 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         currentTipComponent = component;
     }
 
-    private JScrollPane createHtmlTip(HtmlTipData htmlTipData, String tipName) {
-        BrowserPane browserPane = new BrowserPane();
-        try {
-            browserPane.setPage(htmlTipData.getDocumentUri().toURL());
-        } catch (IOException ignored) {
-        }
-        browserPane.setEditable(false);
-        browserPane.setFont(tipFont);
-        browserPane.setName(tipName);
-        tipScrollPane.getViewport().setView(browserPane);
+    private JScrollPane createHtmlTip(HtmlTipData htmlTipData, String tipName) throws IOException, SAXException {
+        DocumentSource docSource =
+                new DefaultDocumentSource(htmlTipData.getDocumentUri().toString());
+        DOMSource parser = new DefaultDOMSource(docSource);
+        Document doc = parser.parse();
+
+        MediaSpec media = new MediaSpec("screen");
+        updateCurrentMedia(media);
+
+        // Create the CSS analyzer
+        DOMAnalyzer da = new DOMAnalyzer(doc, docSource.getURL());
+        da.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        da.setMediaSpec(media);
+
+        da.attributesToStyles();
+        da.addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT);
+        da.addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT);
+        da.getStyleSheets();
+
+        BrowserCanvas browserCanvas = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
+        browserCanvas.setConfig(browserConfig);
+        browserCanvas.createLayout(tipScrollPane.getSize(), tipScrollPane.getVisibleRect());
+        docSource.close();
+
+        browserCanvas.setName(tipName);
+        browserCanvas.setOpaque(false);
+        tipScrollPane.getViewport().setView(browserCanvas);
+        tipScrollPane.setVisible(true);
         return tipScrollPane;
+    }
+
+    /**
+     * Updates the given media specification according to the real screen parametres (if they may be obtained).
+     * @param media The media specification to be updated.
+     */
+    protected void updateCurrentMedia(MediaSpec media) {
+        Dimension size = tipScrollPane.getViewport().getSize();
+        Dimension deviceSize = Toolkit.getDefaultToolkit().getScreenSize();
+        ColorModel colors = Toolkit.getDefaultToolkit().getColorModel();
+
+        media.setDimensions(size.width, size.height);
+        media.setDeviceDimensions(deviceSize.width, deviceSize.height);
+        media.setColor(colors.getComponentSize()[0]);
+        if (colors instanceof IndexColorModel) {
+            media.setColorIndex(((IndexColorModel) colors).getMapSize());
+        }
+        media.setResolution(Toolkit.getDefaultToolkit().getScreenResolution());
     }
 
     private JScrollPane createTextTip(Object tipContent, String tipName) {

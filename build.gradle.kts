@@ -49,7 +49,7 @@ configurations[integrationTest.implementationConfigurationName].extendsFrom(conf
 configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
 
 dependencies {
-    implementation(libs.swingbox)
+    implementation(libs.cssbox)
     testImplementation(libs.slf4j.jdk14)
     testImplementation(platform(libs.junit.bom))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -193,7 +193,6 @@ spotless {
     format("misc") {
         target(listOf("*.gradle", ".gitignore", "*.md", "*.rst"))
         trimTrailingWhitespace()
-        indentWithSpaces()
         endWithNewline()
     }
     java {

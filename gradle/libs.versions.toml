@@ -1,12 +1,12 @@
 [versions]
 slf4j = "2.0.7"
 junit = "5.12.1"
-swingbox = "1.2.8"
+cssbox = "5.0.2"
 sphinx = "1.0.4"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
-swingbox = {group = "tokyo.northside", name = "swingbox", version.ref = "swingbox"}
+cssbox = { module = "net.sf.cssbox:cssbox", version.ref = "cssbox"}
 assertj-swing-junit = {group = "tokyo.northside", name = "assertj-swing-junit", version = "4.0.0-beta-2"}
 slf4j-jdk14 =  {group = "org.slf4j", name = "slf4j-jdk14",  version.ref = "slf4j"}
 
