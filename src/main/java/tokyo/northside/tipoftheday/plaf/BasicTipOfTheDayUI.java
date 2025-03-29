@@ -39,6 +39,7 @@ import java.awt.image.IndexColorModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.swing.AbstractAction;
@@ -346,7 +347,9 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         } else if (tipObject instanceof Icon) {
             setComponentTip(new JLabel((Icon) tipObject), tip.getTipName());
         } else if (tipObject instanceof HtmlTipData) {
-            currentTipComponent = createHtmlTip((HtmlTipData) tipObject, tip.getTipName());
+            currentTipComponent = createHtmlTip(((HtmlTipData) tipObject).getDocumentUri(), tip.getTipName());
+        } else if (tipObject instanceof URI) {
+            currentTipComponent = createHtmlTip((URI) tipObject, tip.getTipName());
         } else {
             currentTipComponent = createTextTip(tipObject, tip.getTipName());
         }
@@ -362,9 +365,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         currentTipComponent = component;
     }
 
-    private JScrollPane createHtmlTip(HtmlTipData htmlTipData, String tipName) throws IOException, SAXException {
-        DocumentSource docSource =
-                new DefaultDocumentSource(htmlTipData.getDocumentUri().toString());
+    private JScrollPane createHtmlTip(URI htmlTipUri, String tipName) throws IOException, SAXException {
+        DocumentSource docSource = new DefaultDocumentSource(htmlTipUri.toString());
         DOMSource parser = new DefaultDOMSource(docSource);
         Document doc = parser.parse();
 
@@ -383,7 +385,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
         BrowserCanvas browserCanvas = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
         browserCanvas.setConfig(browserConfig);
-        browserCanvas.createLayout(tipScrollPane.getSize(), tipScrollPane.getVisibleRect());
+        browserCanvas.createLayout(tipArea.getSize(), tipArea.getVisibleRect());
         docSource.close();
 
         browserCanvas.setName(tipName);

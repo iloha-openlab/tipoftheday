@@ -103,6 +103,7 @@ import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
+@SuppressWarnings("serial")
 public class TipOfTheDay extends JPanel {
 
     /**

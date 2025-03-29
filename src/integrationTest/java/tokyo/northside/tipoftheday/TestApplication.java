@@ -12,17 +12,21 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tokyo.northside.tipoftheday.tips.DefaultTip;
 import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
 import tokyo.northside.tipoftheday.tips.Tip;
 import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
-public class TestApplication extends JFrame {
+public final class TestApplication extends JFrame {
 
-    private TipOfTheDay totd1;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestApplication.class);
 
     public TestApplication() throws HeadlessException {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         createTipOfTheDay();
         setTitle("Tip of the Day");
         setPreferredSize(new Dimension(950, 500));
@@ -45,6 +49,12 @@ public class TestApplication extends JFrame {
         List<Tip> tips = new ArrayList<>();
         tips.add(new DefaultTip(TIP1_NAME, TIP1));
         tips.add(DefaultTip.of(TIP2_NAME, TIP2));
+        try {
+            tips.add(DefaultTip.of(
+                    "URI Tip", getClass().getResource("/tips/data.html").toURI()));
+        } catch (Exception e) {
+            LOGGER.error("Failed to load resource", e);
+        }
         return new DefaultTipOfTheDayModel(tips);
     }
 
@@ -52,7 +62,7 @@ public class TestApplication extends JFrame {
         // model of "tip of the day" component.
         TipOfTheDayModel model = createTipOfTheDayModel();
         JPanel panel = new JPanel();
-        totd1 = new TipOfTheDay(model);
+        TipOfTheDay totd1 = new TipOfTheDay(model);
         totd1.setPreferredSize(new Dimension(900, 450));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(totd1);
@@ -94,5 +104,14 @@ public class TestApplication extends JFrame {
         totd1.getInputMap().put(KeyStroke.getKeyStroke("F2"), "nextTip");
         // set keymap for our actions.
         panel.getInputMap().put(KeyStroke.getKeyStroke("ctrl Q"), "close");
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            LOGGER.error("Failed to set System Look and Feel", e);
+        }
+        new TestApplication();
     }
 }

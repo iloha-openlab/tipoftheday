@@ -30,12 +30,23 @@ HTML with CSS.
 
 Fork of SwingX project.
 
+## Dependency
+
+TipOfTheDay library depends on CSSBox library version 5.0, and SLF4j logging facade library.
+User application requires to use a logging engine, such as logback.
+
+## Documentation and sample project
+
+The Manual page is located at https://tip-of-the-day.readthedocs.io/en/stable/index.html
+
+You can find a demo project source under demo subproject folder.
+
 ## License
 
-LGPL-2.1-or-later
+SPDX: LGPL-2.1-or-later
 
 ## Copyright
 
 - Copyright (c) 2005-2006 Sun Microsystems, Inc., 4150 Network Circle, Santa
   Clara, California 95054, U.S.A. All rights reserved.
-- Copyright (c) 2023 Hiroshi Miura
+- Copyright (c) 2023-2025 Hiroshi Miura

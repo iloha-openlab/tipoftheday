@@ -28,15 +28,12 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
 import javax.swing.AbstractAction;
@@ -53,7 +50,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import tokyo.northside.tipoftheday.TipOfTheDay;
-import tokyo.northside.tipoftheday.data.HtmlTipData;
 import tokyo.northside.tipoftheday.plaf.TipOfTheDayUI;
 import tokyo.northside.tipoftheday.tips.DefaultTip;
 import tokyo.northside.tipoftheday.tips.DefaultTipOfTheDayModel;
@@ -70,10 +66,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  * @author Hiroshi Miura
  */
 public class TipOfTheDayDemo extends JPanel {
+    private static final long serialVersionUID = 1L;
     private static final JFrame frame = new JFrame();
 
     // model of "tip of the day" component.
-    private TipOfTheDayModel model;
+    private final TipOfTheDayModel model;
+
     // controller of "tip of the day" component.
     private TipOfTheDay totd1;
 
@@ -103,18 +101,17 @@ public class TipOfTheDayDemo extends JPanel {
 
     public TipOfTheDayDemo() {
         super(new BorderLayout());
+        model = createTipOfTheDayModel();
         createTipOfTheDayDemo();
     }
 
     private void createTipOfTheDayDemo() {
-        model = createTipOfTheDayModel();
         // Create a component of TipOfTheDay.
         JPanel panel = new JPanel();
         totd1 = new TipOfTheDay(model);
         // When you want to customize UI design, you can make your
-        // custom class inherit from BasicTipOfTheDayUI, and set it
-        // using setUI method.
-        // ex, totd1.setUI(new BasicTipOfTheDayUI(totd1));
+        // custom class inherited from BasicTipOfTheDayUI, and set it
+        // using TipOfTheDay#setUI method.
         totd1.setPreferredSize(new Dimension(900, 450));
         totd1.setName("totd");
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -228,9 +225,6 @@ public class TipOfTheDayDemo extends JPanel {
         }
         TipOfTheDay totd = new TipOfTheDay(model);
         totd.setCurrentTip(0);
-        // When using default dialog:
-        //   boolean result = totd.showDialog(parent, choice, true);
-        // Here we use a primitive method to customize dialog size.
         JDialog dialog = totd.getUI().createDialog(parent, choice);
         dialog.setPreferredSize(new Dimension(600, 350));
         dialog.pack();
@@ -265,36 +259,28 @@ public class TipOfTheDayDemo extends JPanel {
                 Objects.requireNonNull(TipOfTheDayDemo.class.getClassLoader().getResource("tips/TipOfTheDayDemo.png")))));
 
         // HTML from resource
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/SimpleText.html")) {
-            if (is != null) {
-                tips.add(new DefaultTip("Simple HTML", new String(is.readAllBytes(), StandardCharsets.UTF_8)));
-            }
-        } catch (IOException ignored) {
-        }
+        var uri = getClass().getClassLoader().getResource("tips/SimpleText.html");
+        tips.add(new DefaultTip("Simple HTML", uri));
 
         // Use TipLoader utility
         Properties props = new Properties();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("tips/SimpleTips.properties")) {
             props.load(is);
-        } catch (IOException ignored) {
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         TipOfTheDayModel propTips = TipLoader.load(props);
-        // You can use propTips as your model for TipOfTheDay constructor, such as
-        // new TipOfTheDay(propTips);
+        // You can use propTips as your model for TipOfTheDay constructor.
         // Here we retrieve tip objects from the model and merge it into the default model.
         int numPropTips = propTips.getTipCount();
         for (int i = 0; i < numPropTips; i++) {
             tips.add(propTips.getTipAt(i));
         }
 
-        // HTML file
-        Map<String, URI> tipsUri = new TreeMap<>();
-        tipsUri.put("DAY 1", getTipsFileURI("day1.html"));
-        tipsUri.put("DAY 2", getTipsFileURI("day2.html"));
-        tipsUri.put("DAY 3", getTipsFileURI("day3.html"));
-        for (Map.Entry<String, URI> en: tipsUri.entrySet()) {
-            tips.add(DefaultTip.of(en.getKey(), HtmlTipData.from(en.getValue())));
-        }
+        // HTML files
+        tips.add(DefaultTip.of("DAY 1", getTipsFileURI("day1.html")));
+        tips.add(DefaultTip.of("DAY 2", getTipsFileURI("day2.html")));
+        tips.add(DefaultTip.of("DAY 3", getTipsFileURI("day3.html")));
         return tips;
     }
 
@@ -319,6 +305,7 @@ public class TipOfTheDayDemo extends JPanel {
             try {
                 return url.toURI();
             } catch (URISyntaxException ex) {
+                ex.printStackTrace();
             }
         }
         return null;
@@ -331,25 +318,26 @@ public class TipOfTheDayDemo extends JPanel {
      * Returns demo app installation directory.
      */
     public static String installDir() {
-        if (installDir == null) {
-            File file = null;
-            try {
-                URI sourceUri = TipOfTheDayDemo.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-                if (sourceUri.getScheme().equals("file")) {
-                    File uriFile = Paths.get(sourceUri).toFile();
-                    // If running from a JAR, get the enclosing folder
-                    // (the JAR is assumed to be at the installation root)
-                    if (uriFile.getName().endsWith(".jar")) {
-                        file = uriFile.getParentFile();
-                    }
-                }
-            } catch (URISyntaxException ignored) {
-            }
-            if (file == null) {
-                file = Paths.get(".").toFile();
-            }
-            installDir = file.getAbsolutePath();
+        if (installDir != null) {
+            return installDir;
         }
+        File file = null;
+        try {
+            URI sourceUri = TipOfTheDayDemo.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            if (sourceUri.getScheme().equals("file")) {
+                File uriFile = Paths.get(sourceUri).toFile();
+                // If running from a JAR, get the enclosing folder
+                // (the JAR is assumed to be at the installation root)
+                if (uriFile.getName().endsWith(".jar")) {
+                    file = uriFile.getParentFile();
+                }
+            }
+        } catch (URISyntaxException ignored) {
+        }
+        if (file == null) {
+            file = Paths.get(".").toFile();
+        }
+        installDir = file.getAbsolutePath();
         return installDir;
     }
 
