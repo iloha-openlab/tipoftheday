@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.5.0]
+- Extend to accept Tip URI as tip object (#11)
+- Drop dependency for SwingBox, add CSSBox 5.0.2.
+- feat: update HTML renderer with CSSBox, changes in BasicTipOfTheDayUI class.
+- Bump JUnit@5.12.1
+- refactor: UI classes to improve initialization logics for stability and safety.
+- CI: update secret handlings, and installation of git.
+
 ## [v0.4.4]
 - Add integration-test: test UI behavior
 - fix: not to create duplicated components to reduce resource
@@ -83,7 +91,8 @@ All notable changes to this project will be documented in this file.
 
 - First release.
 
-[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.4...HEAD
+[unreleased]: https://codeberg.org/miurahr/tipoftheday/compare/v0.5.0...HEAD
+[v0.5.0]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.4...v0.5.0
 [v0.4.4]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.3...v0.4.4
 [v0.4.3]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.2...v0.4.3
 [v0.4.2]: https://codeberg.org/miurahr/tipoftheday/compare/v0.4.1...v0.4.2
