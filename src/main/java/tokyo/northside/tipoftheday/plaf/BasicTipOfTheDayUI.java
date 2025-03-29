@@ -23,7 +23,6 @@ import cz.vutbr.web.css.MediaSpec;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -71,6 +70,7 @@ import org.fit.cssbox.io.DefaultDOMSource;
 import org.fit.cssbox.io.DefaultDocumentSource;
 import org.fit.cssbox.io.DocumentSource;
 import org.fit.cssbox.layout.BrowserConfig;
+import org.fit.cssbox.layout.Dimension;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import tokyo.northside.tipoftheday.TipOfTheDay;
@@ -92,6 +92,9 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     private static final String SOUTH_POSITION = "South";
     private static final String TEXT_AREA_BACKGROUND_COLOR_KEY = "TextArea.background";
     private static final int NO_CURRENT_TIP = -1;
+
+    private static final float DEFAULT_HEIGHT = 150.0f;
+    private static final float DEFAULT_WIDTH = 300.0f;
 
     protected TipOfTheDay tipPane;
     protected JPanel tipArea;
@@ -385,7 +388,11 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
 
         BrowserCanvas browserCanvas = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
         browserCanvas.setConfig(browserConfig);
-        browserCanvas.createLayout(tipArea.getSize(), tipArea.getVisibleRect());
+        if (tipPane.getSize().width > 0 && tipPane.getSize().height > 0) {
+            browserCanvas.createLayout(tipPane.getSize(), tipPane.getVisibleRect());
+        } else {
+            browserCanvas.createLayout(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        }
         docSource.close();
 
         browserCanvas.setName(tipName);
@@ -400,8 +407,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
      * @param media The media specification to be updated.
      */
     protected void updateCurrentMedia(MediaSpec media) {
-        Dimension size = tipScrollPane.getViewport().getSize();
-        Dimension deviceSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension size = fromSize(tipScrollPane.getViewport().getSize());
+        Dimension deviceSize = fromSize(Toolkit.getDefaultToolkit().getScreenSize());
         ColorModel colors = Toolkit.getDefaultToolkit().getColorModel();
 
         media.setDimensions(size.width, size.height);
@@ -439,6 +446,10 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipTextArea.setName(tipName);
         tipScrollPane.getViewport().setView(tipTextArea);
         return tipScrollPane;
+    }
+
+    private Dimension fromSize(java.awt.Dimension size) {
+        return new Dimension(size.width, size.height);
     }
 
     class ChangeListener implements PropertyChangeListener {

@@ -109,7 +109,7 @@ public class TipOfTheDay extends JPanel {
     /**
      * TipOfTheDay pluggable UI key <i>TipOfTheDayUI</i>
      */
-    private static final String uiClassID = "TipOfTheDayUI";
+    private static final String UI_CLASS_ID = "TipOfTheDayUI";
 
     /**
      * Used when generating PropertyChangeEvents for the "currentTip" property
@@ -160,24 +160,12 @@ public class TipOfTheDay extends JPanel {
      */
     @Override
     public void updateUI() {
-        if (UIManager.get(uiClassID) != null) {
+        if (UIManager.get(UI_CLASS_ID) != null) {
             setUI((TipOfTheDayUI) UIManager.getUI(this));
         } else {
             setUI(DefaultTipOfTheDayUI.createUI(this));
         }
         setName("tip_of_the_day");
-    }
-
-    /**
-     * Sets the L&amp;F object that renders this component.
-     *
-     * @param ui
-     *          the <code>TipOfTheDayUI</code> L&amp;F object
-     * @see javax.swing.UIDefaults#getUI
-     *
-     */
-    public void setUI(TipOfTheDayUI ui) {
-        super.setUI(ui);
     }
 
     /**
@@ -193,13 +181,13 @@ public class TipOfTheDay extends JPanel {
     /**
      * Returns the name of the L&amp;F class that renders this component.
      *
-     * @return the string {@link #uiClassID}
+     * @return the string {@link #UI_CLASS_ID}
      * @see javax.swing.JComponent#getUIClassID
      * @see javax.swing.UIDefaults#getUI
      */
     @Override
     public String getUIClassID() {
-        return uiClassID;
+        return UI_CLASS_ID;
     }
 
     /**
