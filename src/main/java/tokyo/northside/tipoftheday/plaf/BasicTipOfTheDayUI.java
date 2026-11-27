@@ -75,6 +75,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import tokyo.northside.tipoftheday.TipOfTheDay;
 import tokyo.northside.tipoftheday.data.HtmlTipData;
+import tokyo.northside.tipoftheday.html.CjkLineBreakInjector;
 import tokyo.northside.tipoftheday.tips.Tip;
 import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
 
@@ -119,7 +120,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipScrollPane.setOpaque(false);
         tipScrollPane.getViewport().setOpaque(false);
         tipScrollPane.setBorder(null);
-        tipScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        tipScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tipEditorPane.setEditable(false);
         tipTextArea.setEditable(false);
         tipTextArea.setLineWrap(true);
@@ -382,14 +383,16 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         da.setMediaSpec(media);
 
         da.attributesToStyles();
+        preprocessDocument(doc);
         da.addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT);
         da.addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT);
         da.getStyleSheets();
 
         BrowserCanvas browserCanvas = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
         browserCanvas.setConfig(browserConfig);
-        if (tipPane.getSize().width > 0 && tipPane.getSize().height > 0) {
-            browserCanvas.createLayout(tipPane.getSize(), tipPane.getVisibleRect());
+        java.awt.Dimension size = canvasSize();
+        if (size.width > 0 && size.height > 0) {
+            browserCanvas.createLayout(size, new java.awt.Rectangle(size));
         } else {
             browserCanvas.createLayout(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         }
@@ -400,6 +403,38 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         tipScrollPane.getViewport().setView(browserCanvas);
         tipScrollPane.setVisible(true);
         return tipScrollPane;
+    }
+
+    /**
+     * The area the document has to be laid out for.
+     *
+     * <p>That is the viewport of the scroll pane, which is what the canvas is put into. It is
+     * narrower than the tip pane by the insets of the tip area and by the vertical scroll bar, so
+     * laying the document out for the pane would make it overflow. The pane is only used as a
+     * fall-back for the first document, rendered before the scroll pane has been given a size.
+     *
+     * @return the size to lay out for, which may be empty when nothing has been laid out yet.
+     */
+    private java.awt.Dimension canvasSize() {
+        java.awt.Dimension size = tipScrollPane.getViewport().getSize();
+        if (size.width <= 0 || size.height <= 0) {
+            size = tipPane.getSize();
+        }
+        return size;
+    }
+
+    /**
+     * Hook invoked on the parsed document after the presentation attributes have been turned into
+     * styles, and before the style sheets are collected.
+     *
+     * <p>It inserts line-break opportunities for the scripts CSSBox is unable to break, which are
+     * the ones written without spaces between the words. Documents that hold no such text are left
+     * untouched. Override with an empty body to disable the preprocessing.
+     *
+     * @param doc the parsed document, modified in place.
+     */
+    protected void preprocessDocument(Document doc) {
+        new CjkLineBreakInjector(tipPane.getLocale()).inject(doc);
     }
 
     /**

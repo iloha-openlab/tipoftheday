@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- fix: wrap CJK text instead of clipping it; CSSBox only breaks lines at ASCII spaces,
+  so line-break opportunities are now inserted into the document before layout.
 
 ## [v0.5.0]
 - Extend to accept Tip URI as tip object (#11)
