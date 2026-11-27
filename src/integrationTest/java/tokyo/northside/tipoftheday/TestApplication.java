@@ -6,6 +6,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,6 +38,8 @@ public final class TestApplication extends JFrame {
 
     public static final String TIP1_NAME = "Plain Text Tip";
     public static final String TIP2_NAME = "HTML Text Tip";
+    public static final String TIP3_NAME = "URI Tip";
+    public static final String TIP4_NAME = "Japanese URI Tip";
     public static final String TIP1 = "This is the first tip " + "This is the first tip "
             + "This is the first tip " + "This is the first tip " + "This is the first tip "
             + "This is the first tip\n" + "This is the first tip " + "This is the first tip";
@@ -51,7 +54,9 @@ public final class TestApplication extends JFrame {
         tips.add(DefaultTip.of(TIP2_NAME, TIP2));
         try {
             tips.add(DefaultTip.of(
-                    "URI Tip", getClass().getResource("/tips/data.html").toURI()));
+                    TIP3_NAME, Objects.requireNonNull(getClass().getResource("/tips/data.html")).toURI()));
+            tips.add(DefaultTip.of(
+                    TIP4_NAME, Objects.requireNonNull(getClass().getResource("/tips/japanese.html")).toURI()));
         } catch (Exception e) {
             LOGGER.error("Failed to load resource", e);
         }
