@@ -54,9 +54,13 @@ public final class TestApplication extends JFrame {
         tips.add(DefaultTip.of(TIP2_NAME, TIP2));
         try {
             tips.add(DefaultTip.of(
-                    TIP3_NAME, Objects.requireNonNull(getClass().getResource("/tips/data.html")).toURI()));
+                    TIP3_NAME,
+                    Objects.requireNonNull(getClass().getResource("/tips/data.html"))
+                            .toURI()));
             tips.add(DefaultTip.of(
-                    TIP4_NAME, Objects.requireNonNull(getClass().getResource("/tips/japanese.html")).toURI()));
+                    TIP4_NAME,
+                    Objects.requireNonNull(getClass().getResource("/tips/japanese.html"))
+                            .toURI()));
         } catch (Exception e) {
             LOGGER.error("Failed to load resource", e);
         }

@@ -83,7 +83,8 @@ class CjkLineBreakRenderTest {
     private static Viewport layout(String html, int width, boolean inject) throws Exception {
         try (DocumentSource src = new StreamDocumentSource(
                 new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8)),
-                new URL("file:///cjk-test.html"), "text/html; charset=UTF-8")) {
+                new URL("file:///cjk-test.html"),
+                "text/html; charset=UTF-8")) {
             Document doc = new DefaultDOMSource(src).parse();
             DOMAnalyzer da = new DOMAnalyzer(doc, src.getURL());
             da.setDefaultEncoding(StandardCharsets.UTF_8.name());
