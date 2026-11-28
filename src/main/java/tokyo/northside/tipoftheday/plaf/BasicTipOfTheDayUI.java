@@ -129,11 +129,12 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     }
 
     @Override
-    public JDialog createDialog(Component parentComponent, final TipOfTheDay.@Nullable ShowOnStartupChoice choice) {
+    public JDialog createDialog(
+            @Nullable Component parentComponent, final TipOfTheDay.@Nullable ShowOnStartupChoice choice) {
         return createDialog(parentComponent, choice, true);
     }
 
-    private Window resolveWindow(@Nullable Component parentComponent) {
+    private @Nullable Window resolveWindow(@Nullable Component parentComponent) {
         if (parentComponent == null) {
             return JOptionPane.getRootFrame();
         }

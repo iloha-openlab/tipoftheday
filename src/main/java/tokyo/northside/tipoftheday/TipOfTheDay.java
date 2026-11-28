@@ -281,7 +281,7 @@ public class TipOfTheDay extends JPanel {
      * @see java.awt.GraphicsEnvironment#isHeadless
      */
     @SuppressWarnings("unused")
-    public void showDialog(Component parentComponent) throws HeadlessException {
+    public void showDialog(@Nullable Component parentComponent) throws HeadlessException {
         showDialog(parentComponent, null);
     }
 
@@ -303,7 +303,7 @@ public class TipOfTheDay extends JPanel {
      *         otherwise.
      */
     @SuppressWarnings("unused")
-    public boolean showDialog(Component parentComponent, boolean force) throws HeadlessException {
+    public boolean showDialog(@Nullable Component parentComponent, boolean force) throws HeadlessException {
 
         ShowOnStartupChoice store = new ShowOnStartupChoice() {
             @Override
@@ -335,7 +335,7 @@ public class TipOfTheDay extends JPanel {
      * @see java.awt.GraphicsEnvironment#isHeadless
      * @return true if the user chooses to see the tips again, false otherwise.
      */
-    public boolean showDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice) {
+    public boolean showDialog(@Nullable Component parentComponent, @Nullable ShowOnStartupChoice choice) {
         return showDialog(parentComponent, choice, false);
     }
 
@@ -359,7 +359,8 @@ public class TipOfTheDay extends JPanel {
      * @see java.awt.GraphicsEnvironment#isHeadless
      * @return true if the user chooses to see the tips again, false otherwise.
      */
-    public boolean showDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice, boolean force) {
+    public boolean showDialog(
+            @Nullable Component parentComponent, @Nullable ShowOnStartupChoice choice, boolean force) {
         if (choice == null) {
             JDialog dialog = createDialog(parentComponent, null);
             dialog.setVisible(true);
@@ -386,7 +387,7 @@ public class TipOfTheDay extends JPanel {
      * @param choice choice of tip when shown startup.
      * @return a JDialog to show this TipOfTheDay pane
      */
-    protected JDialog createDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice) {
+    protected JDialog createDialog(@Nullable Component parentComponent, @Nullable ShowOnStartupChoice choice) {
         return getUI().createDialog(parentComponent, choice);
     }
 

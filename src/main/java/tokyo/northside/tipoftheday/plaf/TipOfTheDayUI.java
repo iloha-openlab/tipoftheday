@@ -43,5 +43,6 @@ public abstract class TipOfTheDayUI extends PanelUI {
      * @param choice config of the choice.
      * @return a new JDialog to display a TipOfTheDay panel
      */
-    public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.@Nullable ShowOnStartupChoice choice);
+    public abstract JDialog createDialog(
+            @Nullable Component parentComponent, TipOfTheDay.@Nullable ShowOnStartupChoice choice);
 }
