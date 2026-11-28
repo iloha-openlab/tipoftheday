@@ -71,6 +71,7 @@ import org.fit.cssbox.io.DefaultDocumentSource;
 import org.fit.cssbox.io.DocumentSource;
 import org.fit.cssbox.layout.BrowserConfig;
 import org.fit.cssbox.layout.Dimension;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import tokyo.northside.tipoftheday.TipOfTheDay;
@@ -98,14 +99,14 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     private static final float DEFAULT_WIDTH = 300.0f;
 
     protected TipOfTheDay tipPane;
-    protected JPanel tipArea;
-    protected Component currentTipComponent;
+    protected @Nullable JPanel tipArea;
+    protected @Nullable Component currentTipComponent;
     protected JScrollPane tipScrollPane;
     protected JEditorPane tipEditorPane;
     protected JTextArea tipTextArea;
 
-    protected Font tipFont;
-    protected PropertyChangeListener changeListener;
+    protected @Nullable Font tipFont;
+    protected @Nullable PropertyChangeListener changeListener;
 
     protected BrowserConfig browserConfig;
 
@@ -128,11 +129,12 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     }
 
     @Override
-    public JDialog createDialog(Component parentComponent, final TipOfTheDay.ShowOnStartupChoice choice) {
+    public JDialog createDialog(
+            @Nullable Component parentComponent, final TipOfTheDay.@Nullable ShowOnStartupChoice choice) {
         return createDialog(parentComponent, choice, true);
     }
 
-    private Window resolveWindow(Component parentComponent) {
+    private @Nullable Window resolveWindow(@Nullable Component parentComponent) {
         if (parentComponent == null) {
             return JOptionPane.getRootFrame();
         }
@@ -151,8 +153,8 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
      * @return a new JDialog to display a TipOfTheDay panel
      */
     @SuppressWarnings("SameParameterValue")
-    protected JDialog createDialog(
-            Component parentComponent, final TipOfTheDay.ShowOnStartupChoice choice, boolean showPreviousButton) {
+    protected JDialog createDialog(@Nullable Component parentComponent,
+                                   TipOfTheDay.@Nullable ShowOnStartupChoice choice, boolean showPreviousButton) {
         Locale locale = parentComponent == null ? null : parentComponent.getLocale();
         String title = UIManager.getString("TipOfTheDay.dialogTitle", locale);
 
@@ -249,9 +251,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
      */
     protected void installKeyboardActions() {
         ActionMap map = getActionMap();
-        if (map != null) {
-            SwingUtilities.replaceUIActionMap(tipPane, map);
-        }
+        SwingUtilities.replaceUIActionMap(tipPane, map);
     }
 
     ActionMap getActionMap() {
@@ -292,6 +292,9 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
     }
 
     protected void showCurrentTip() {
+        if (tipArea == null) {
+            return;
+        }
         if (currentTipComponent != null) {
             tipArea.remove(currentTipComponent);
         }
@@ -359,7 +362,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         }
     }
 
-    private boolean isInvalidTip(int currentTip, TipOfTheDayModel model) {
+    private boolean isInvalidTip(int currentTip, @Nullable TipOfTheDayModel model) {
         // tip does not fall in current tip range
         return model == null || model.getTipCount() == 0 || currentTip < 0 || currentTip >= model.getTipCount();
     }
@@ -455,7 +458,7 @@ public abstract class BasicTipOfTheDayUI extends TipOfTheDayUI {
         media.setResolution(Toolkit.getDefaultToolkit().getScreenResolution());
     }
 
-    private JScrollPane createTextTip(Object tipContent, String tipName) {
+    private JScrollPane createTextTip(@Nullable Object tipContent, String tipName) {
         String text = tipContent == null ? "" : tipContent.toString();
         if (BasicHTML.isHTMLString(text)) {
             return createHtmlEditorPane(text, tipName);
