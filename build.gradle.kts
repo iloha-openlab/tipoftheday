@@ -50,7 +50,7 @@ configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configu
 
 dependencies {
     implementation(libs.cssbox)
-    implementation(libs.jspecify)
+    api(libs.jspecify)
     testImplementation(libs.slf4j.jdk14)
     testImplementation(platform(libs.junit.bom))
     testImplementation("org.junit.jupiter:junit-jupiter")
