@@ -1,14 +1,19 @@
 package tokyo.northside.tipoftheday.data;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * HTML tip data.
+ */
 public class HtmlTipData {
 
     private final URI documentUri;
-    private String text = null;
+    private @Nullable String text = null;
 
     public HtmlTipData(URI documentUri) {
         this.documentUri = documentUri;

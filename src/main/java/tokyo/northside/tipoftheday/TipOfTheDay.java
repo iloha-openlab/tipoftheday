@@ -24,6 +24,8 @@ import java.awt.HeadlessException;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import org.jspecify.annotations.Nullable;
 import tokyo.northside.tipoftheday.plaf.DefaultTipOfTheDayUI;
 import tokyo.northside.tipoftheday.plaf.TipOfTheDayUI;
 import tokyo.northside.tipoftheday.tips.DefaultTip;
@@ -103,8 +105,8 @@ import tokyo.northside.tipoftheday.tips.TipOfTheDayModel;
  * @author Frederic Lavigne
  * @author Hiroshi Miura
  */
-@SuppressWarnings("serial")
 public class TipOfTheDay extends JPanel {
+    private static final long serialVersionUID = 1L;
 
     /**
      * TipOfTheDay pluggable UI key <i>TipOfTheDayUI</i>
@@ -203,7 +205,7 @@ public class TipOfTheDay extends JPanel {
      * fire PropertyChange event with an old and a new model objects.
      * @param model TipOfTheDayModel object.
      */
-    public void setModel(TipOfTheDayModel model) {
+    public void setModel(@Nullable TipOfTheDayModel model) {
         if (model == null) {
             throw new IllegalArgumentException("model can not be null");
         }
@@ -333,7 +335,7 @@ public class TipOfTheDay extends JPanel {
      * @see java.awt.GraphicsEnvironment#isHeadless
      * @return true if the user chooses to see the tips again, false otherwise.
      */
-    public boolean showDialog(Component parentComponent, ShowOnStartupChoice choice) {
+    public boolean showDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice) {
         return showDialog(parentComponent, choice, false);
     }
 
@@ -357,7 +359,7 @@ public class TipOfTheDay extends JPanel {
      * @see java.awt.GraphicsEnvironment#isHeadless
      * @return true if the user chooses to see the tips again, false otherwise.
      */
-    public boolean showDialog(Component parentComponent, ShowOnStartupChoice choice, boolean force) {
+    public boolean showDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice, boolean force) {
         if (choice == null) {
             JDialog dialog = createDialog(parentComponent, null);
             dialog.setVisible(true);
@@ -384,7 +386,7 @@ public class TipOfTheDay extends JPanel {
      * @param choice choice of tip when shown startup.
      * @return a JDialog to show this TipOfTheDay pane
      */
-    protected JDialog createDialog(Component parentComponent, ShowOnStartupChoice choice) {
+    protected JDialog createDialog(Component parentComponent, @Nullable ShowOnStartupChoice choice) {
         return getUI().createDialog(parentComponent, choice);
     }
 

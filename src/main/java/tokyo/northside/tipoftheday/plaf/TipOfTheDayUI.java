@@ -22,6 +22,8 @@ package tokyo.northside.tipoftheday.plaf;
 import java.awt.Component;
 import javax.swing.JDialog;
 import javax.swing.plaf.PanelUI;
+
+import org.jspecify.annotations.Nullable;
 import tokyo.northside.tipoftheday.TipOfTheDay;
 
 /**
@@ -41,5 +43,5 @@ public abstract class TipOfTheDayUI extends PanelUI {
      * @param choice config of the choice.
      * @return a new JDialog to display a TipOfTheDay panel
      */
-    public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.ShowOnStartupChoice choice);
+    public abstract JDialog createDialog(Component parentComponent, TipOfTheDay.@Nullable ShowOnStartupChoice choice);
 }

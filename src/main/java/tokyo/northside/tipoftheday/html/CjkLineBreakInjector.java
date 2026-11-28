@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -99,7 +101,7 @@ public final class CjkLineBreakInjector {
      *     covered by a {@code lang} or {@code xml:lang} attribute. When {@code null}, the default
      *     locale is used.
      */
-    public CjkLineBreakInjector(Locale fallbackLocale) {
+    public CjkLineBreakInjector(@Nullable Locale fallbackLocale) {
         this.fallbackLocale = fallbackLocale == null ? Locale.getDefault() : fallbackLocale;
     }
 
@@ -111,7 +113,7 @@ public final class CjkLineBreakInjector {
      *
      * @param doc the parsed document, or {@code null}.
      */
-    public void inject(Document doc) {
+    public void inject(@Nullable Document doc) {
         if (doc == null) {
             return;
         }
@@ -130,7 +132,7 @@ public final class CjkLineBreakInjector {
         }
     }
 
-    private static Element findBody(Document doc) {
+    private static @Nullable Element findBody(Document doc) {
         Element root = doc.getDocumentElement();
         if (root == null) {
             return null;
@@ -176,7 +178,7 @@ public final class CjkLineBreakInjector {
         return preservesWhiteSpace(element.getAttribute("style"));
     }
 
-    private static boolean preservesWhiteSpace(String style) {
+    private static boolean preservesWhiteSpace(@Nullable String style) {
         if (style == null || style.isEmpty()) {
             return false;
         }
@@ -273,7 +275,7 @@ public final class CjkLineBreakInjector {
     }
 
     /** Tells whether the text holds at least one character of a script that is written unspaced. */
-    private static boolean containsCjk(String text) {
+    private static boolean containsCjk(@Nullable String text) {
         if (text == null) {
             return false;
         }
